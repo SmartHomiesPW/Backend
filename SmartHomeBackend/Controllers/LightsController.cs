@@ -6,14 +6,14 @@ using System.Xml.Linq;
 
 namespace SmartHomeBackend.Controllers
 {
-    [Route("api/lights/")]
+    [Route("api/system/1/board/1/devices/lights/1")]
     [ApiController]
     public class LightsController : ControllerBase
     {
-        [HttpPatch]
-        public async Task TurnTheLightOn()
+        [HttpGet]
+        public async Task ToggleTheLightState()
         {
-            string url = "http://127.0.0.1:5000/api/lights/1";
+            string url = "http://127.0.0.1:5000/api/system/1/board/1/devices/lights/1";
             using (HttpClient client = new HttpClient())
             {
                 try
@@ -23,7 +23,6 @@ namespace SmartHomeBackend.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        
                     }
                     else
                     {
