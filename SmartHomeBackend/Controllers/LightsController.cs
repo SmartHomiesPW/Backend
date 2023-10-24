@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartHomeBackend.Models;
-using System;
-using System.Net;
-using System.Xml.Linq;
 
 namespace SmartHomeBackend.Controllers
 {
-    [Route("api/system/1/board/1/devices/lights/1")]
+    [Route("api/system/{systemId}/board/{boardId}/devices/lights")]
     [ApiController]
     public class LightsController : ControllerBase
     {
+        [Route("{lightId}")]
         [HttpGet]
-        public async Task ToggleTheLightState()
+        public async Task<IActionResult> ToggleLightState(int systemId, int boardId, int lightId)
         {
-            string url = "http://127.0.0.1:5000/api/system/1/board/1/devices/lights/1";
+            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/lights/{lightId}";
             using (HttpClient client = new HttpClient())
             {
                 try
@@ -22,18 +19,16 @@ namespace SmartHomeBackend.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        string responseContent = await response.Content.ReadAsStringAsync();
+                        return Ok(response);
                     }
                     else
                     {
-                        // Handle the case where the request was not successful.
-                        Console.WriteLine($"Request failed with status code: {response.StatusCode}");
+                        return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
                     }
                 }
                 catch (HttpRequestException e)
                 {
-                    // Handle exceptions that may occur during the request.
-                    Console.WriteLine($"Request error: {e.Message}");
+                    return StatusCode(500, $"An error occurred: {e.Message}");
                 }
             }
         }
