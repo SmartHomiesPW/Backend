@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace SmartHomeBackend.Controllers
 {
@@ -16,10 +17,12 @@ namespace SmartHomeBackend.Controllers
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(url);
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonDocument = JsonDocument.Parse(jsonResponse);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        return Ok(response);
+                        return Ok(jsonDocument);
                     }
                     else
                     {
@@ -43,10 +46,12 @@ namespace SmartHomeBackend.Controllers
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(url);
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonDocument = JsonDocument.Parse(jsonResponse);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        return Ok(response);
+                        return Ok(jsonDocument);
                     }
                     else
                     {
