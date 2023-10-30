@@ -1,0 +1,11 @@
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\SmartHomeBackend.exe
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\appsettings.Development.json
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\appsettings.json
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\SmartHomeBackend.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\SmartHomeBackend.deps.json
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\SmartHomeBackend.runtimeconfig.json
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\SmartHomeBackend.pdb
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\Microsoft.OpenApi.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\publish\Swashbuckle.AspNetCore.SwaggerUI.dll

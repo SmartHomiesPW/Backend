@@ -52,3 +52,8 @@ C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\refi
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\SmartHomeBackend.pdb
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\SmartHomeBackend.genruntimeconfig.cache
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\ref\SmartHomeBackend.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\staticwebassets\msbuild.SmartHomeBackend.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\staticwebassets\msbuild.build.SmartHomeBackend.props
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.SmartHomeBackend.props
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.SmartHomeBackend.props
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\obj\Debug\net6.0\staticwebassets.pack.json

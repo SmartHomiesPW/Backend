@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "VzTCgQRtLcm2VawWFmEKF9OXHfySMSq9gh4lBmiGWNQ=",
+  "Source": "SmartHomeBackend",
+  "BasePath": "_content/SmartHomeBackend",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
