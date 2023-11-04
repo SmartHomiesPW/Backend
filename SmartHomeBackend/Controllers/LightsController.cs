@@ -29,7 +29,7 @@ namespace SmartHomeBackend.Controllers
             {
                 throw new HttpRequestException("Light does not exist in system.");
             }
-         
+            
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/lights/{lightId}";
             using (HttpClient client = new HttpClient())
             {
@@ -58,7 +58,7 @@ namespace SmartHomeBackend.Controllers
 
         [Route("{lightId}/log")]
         [HttpGet]
-        public async Task<IActionResult> GetLightState(int systemId, int boardId, int lightId)
+        public async Task<IActionResult> GetLightValue(int systemId, int boardId, int lightId)
         {
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/lights/{lightId}/log";
             using (HttpClient client = new HttpClient())
