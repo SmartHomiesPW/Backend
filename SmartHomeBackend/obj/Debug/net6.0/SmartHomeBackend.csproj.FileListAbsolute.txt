@@ -107,4 +107,7 @@ C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\runt
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\Database\smart_home.db
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\Humanizer.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\Mono.TextTemplating.dll
+C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\System.CodeDom.dll

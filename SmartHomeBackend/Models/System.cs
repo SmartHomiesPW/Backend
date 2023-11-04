@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHomeBackend.Models
 {
+    [Table("Systems")]
     public class System
     {
         [Key]

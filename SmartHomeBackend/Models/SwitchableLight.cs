@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHomeBackend.Models
 {
+    [Table("Switchable_Lights")]
     public class SwitchableLight
     {
         [Key]
