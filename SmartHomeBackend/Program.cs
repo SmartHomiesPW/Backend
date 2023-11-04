@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using SmartHomeBackend.Database;
+using SmartHomeBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<SmartHomeDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<SystemService>();
+builder.Services.AddScoped<SwitchableLightService>();
+
 
 var app = builder.Build();
 
