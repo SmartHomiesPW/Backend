@@ -8,7 +8,7 @@ namespace SmartHomeBackend.Models
     {
         [Key]
         public string User_Id { get; set; }
-        public string Login { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }
