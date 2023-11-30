@@ -19,7 +19,7 @@ namespace SmartHomeBackend.Controllers.Devices
             _systemService = systemService;
             _deviceService = deviceService;
         }
-
+        
         [Route("{lightId}")]
         [HttpGet]
         public async Task<IActionResult> ToggleLightState(int systemId, int boardId, int lightId)

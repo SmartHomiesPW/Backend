@@ -1,24 +1,27 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Models;
+using System.Text.Json;
 
 namespace SmartHomeBackend.Services
 {
     public class AuthService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly SmartHomeDbContext _context;
 
-        public AuthService(UserManager<User> userManager)
+        public AuthService(SmartHomeDbContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
 
-        public async Task<IdentityResult> CreateNewUser(User model)
+        public async Task<User> CreateNewUser(User model)
         {
-            var user = new User { Email = model.Email, Password = model.Password };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var user = new User { User_Id = model.User_Id, Email = model.Email, Password = model.Password };
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
-            return result;
+            return user;
         }
 
     }

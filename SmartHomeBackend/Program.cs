@@ -18,8 +18,9 @@ builder.Services.AddDbContext<SmartHomeDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SystemService>();
-builder.Services.AddScoped<SwitchableLightService>();
+builder.Services.AddScoped<DeviceService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -32,9 +33,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("key")),
         };
     });
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddUserStore<SmartHomeDbContext>()
-    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
