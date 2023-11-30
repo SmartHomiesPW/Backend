@@ -24,5 +24,10 @@ namespace SmartHomeBackend.Services
             return user;
         }
 
+        public async Task<bool> VerifyUser(User model)
+        {
+            return _context.Users.Any(u => u.Email == model.Email && u.Password == model.Password);
+        }
+
     }
 }

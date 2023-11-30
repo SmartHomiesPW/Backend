@@ -31,8 +31,12 @@ namespace SmartHomeBackend.Controllers.Auth
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] User model)
         {
+            if (await _authService.VerifyUser(model))
+            {
+                return Ok(model);
+            }
 
-            return Unauthorized("Invalid username or password");
+            return StatusCode(400, $"An error occurred: Incorrect email or password");
         }
     }
 }
