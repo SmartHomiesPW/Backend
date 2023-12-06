@@ -22,7 +22,7 @@ namespace SmartHomeBackendUnitTests.Services
         public async void UserShouldBeAddedToDatabase()
         {
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseSqlite("Data Source=C:\\Users\\adria\\Desktop\\smart_home_backend\\SmartHomeBackend\\Database\\test.db").Options;
+                .UseSqlite("Data Source=test.db").Options;
 
             using (var context = new SmartHomeDbContext(options))
             {
@@ -40,7 +40,7 @@ namespace SmartHomeBackendUnitTests.Services
         public async void UserShouldBeRemovedFromDatabase()
         {
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseSqlite("Data Source=C:\\Users\\adria\\Desktop\\smart_home_backend\\SmartHomeBackend\\Database\\test.db").Options;
+                .UseSqlite("Data Source=test.db").Options;
 
             using (var context = new SmartHomeDbContext(options))
             {
