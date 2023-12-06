@@ -24,9 +24,22 @@ namespace SmartHomeBackend.Services
             return user;
         }
 
+        public async Task<User> RemoveUser(User model)
+        {
+            var userToDelete = _context.Users.Where(u => u.User_Id.Equals(model.User_Id)).FirstOrDefault();
+
+            if (userToDelete != null)
+            {
+                _context.Users.Remove(userToDelete);
+                _context.SaveChanges();
+            }
+
+            return model;
+        }
+
         public async Task<bool> VerifyUser(User model)
         {
-            return _context.Users.Any(u => u.Email == model.Email && u.Password == model.Password);
+            return _context.Users.Any(u => u.Email.Equals(model.Email) && u.Password.Equals(model.Password));
         }
 
     }

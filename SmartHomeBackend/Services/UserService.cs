@@ -20,12 +20,12 @@ namespace SmartHomeBackend.Services
         
         public User GetUser(string id)
         {
-            return _context.Users.Where(u => u.User_Id == id).First();
+            return _context.Users.Where(u => u.User_Id.Equals(id)).First();
         }
 
         public bool UserExists(string userId)
         {
-            return _context.Users.Any(u => u.User_Id == userId);
+            return _context.Users.Any(u => u.User_Id.Equals(userId));
         }
     }
 }
