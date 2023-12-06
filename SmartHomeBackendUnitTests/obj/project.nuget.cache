@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cah/+Kthd+Ch0q7d0+7K3qS/JAWCeBfcJUAl5mgB9AI1U8pFw8EkIBtb7bnMhrG//7zpB5dpMApqOOPeyLTDCw==",
+  "dgSpecHash": "aymS+ju6CGZULQZnjKTUBgAjdGYo7DJmF8EXf3FYLEPh2KbBAzLj9E1R7S0Th+j/KGkU8Wrn9gkIFsqttkUeiw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\Desktop\\smart_home_backend\\SmartHomeBackendUnitTests\\SmartHomeBackendUnitTests.csproj",
+  "projectFilePath": "C:\\Users\\adria\\Desktop\\Backend\\SmartHomeBackendUnitTests\\SmartHomeBackendUnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adria\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",

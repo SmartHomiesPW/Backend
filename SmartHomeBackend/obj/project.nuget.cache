@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x4uM2pScNv83BopyYCRVg+CWwtD4jeinChzmH0iQXPtFQAQmzy/h4FrjHOqOJe8sbyAj1sioYt6e+Kqn1gpJRg==",
+  "dgSpecHash": "355ObQLEnz3LGoay1aitReI5oIdl9umLByXordPmykfGvX+CZDtgT+KwYpmZgVWo9pYts4v8/vMxGQlKZjVx+g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\Desktop\\smart_home_backend\\SmartHomeBackend\\SmartHomeBackend.csproj",
+  "projectFilePath": "C:\\Users\\adria\\Desktop\\Backend\\SmartHomeBackend\\SmartHomeBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adria\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

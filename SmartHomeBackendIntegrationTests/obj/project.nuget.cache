@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1v5wBpLrpqqH3coI0QIVKi9jm460IC0W1wT22XAHUZnZGZn61tRk0ZsIKWmnVMZHSFIICQAtHMTqy0snlnF+GQ==",
+  "dgSpecHash": "t9YjvmcxNLnpuZ1lZCYVSAo/OfKdBbVTw8zjOVmOgP3NXtrWsQqOBHSqBShFRsNfuvpMv0FUuGZQQVeyOHiHvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\Desktop\\smart_home_backend\\SmartHomeBackendIntegrationTests\\SmartHomeBackendIntegrationTests.csproj",
+  "projectFilePath": "C:\\Users\\adria\\Desktop\\Backend\\SmartHomeBackendIntegrationTests\\SmartHomeBackendIntegrationTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adria\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
