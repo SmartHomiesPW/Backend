@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartHomeBackend.Database;
+using SmartHomeBackend.Models;
 using SmartHomeBackend.Services;
 using System.Text.Json;
 
@@ -9,10 +11,18 @@ namespace SmartHomeBackend.Controllers.Devices
     public class SensorsController : Controller
     {
         private readonly DeviceService _deviceService;
+        private readonly SmartHomeDbContext _context;
 
-        public SensorsController(DeviceService deviceService)
+        public SensorsController(SmartHomeDbContext context, DeviceService deviceService)
         {
             _deviceService = deviceService;
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllSensors()
+        {
+            return Ok();
         }
 
         [Route("humidity/{sensorId}")]

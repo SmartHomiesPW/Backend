@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
+using SmartHomeBackend.Models;
 using SmartHomeBackend.Services;
 using System.Text.Json;
 
@@ -19,7 +20,14 @@ namespace SmartHomeBackend.Controllers.Devices
             _systemService = systemService;
             _deviceService = deviceService;
         }
-        
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllLights(string boardId)
+        {
+            List<SwitchableLight> lightsOnBoard = _deviceService.GetAllLights(boardId, _context);
+            return Ok(lightsOnBoard);
+        }
+
         [Route("{lightId}")]
         [HttpGet]
         public async Task<IActionResult> ToggleLightState(int systemId, int boardId, int lightId)

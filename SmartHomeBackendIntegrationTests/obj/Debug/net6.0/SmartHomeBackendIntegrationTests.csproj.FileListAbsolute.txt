@@ -369,3 +369,4 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\SmartHomeBackendIntegrationTests.pdb
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\SmartHomeBackendIntegrationTests.genruntimeconfig.cache
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\ref\SmartHomeBackendIntegrationTests.dll
+C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Database\test.db

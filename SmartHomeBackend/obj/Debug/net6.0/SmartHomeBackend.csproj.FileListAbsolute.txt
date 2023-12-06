@@ -234,3 +234,4 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackend\obj\Debug\net6.0\refint\SmartHom
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\obj\Debug\net6.0\SmartHomeBackend.pdb
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\obj\Debug\net6.0\SmartHomeBackend.genruntimeconfig.cache
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\obj\Debug\net6.0\ref\SmartHomeBackend.dll
+C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\Database\test.db

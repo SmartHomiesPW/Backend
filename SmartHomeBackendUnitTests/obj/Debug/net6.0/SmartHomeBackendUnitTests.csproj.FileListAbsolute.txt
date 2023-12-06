@@ -405,3 +405,4 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\obj\Debug\net6.0\refint
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\obj\Debug\net6.0\SmartHomeBackendUnitTests.pdb
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\obj\Debug\net6.0\SmartHomeBackendUnitTests.genruntimeconfig.cache
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\obj\Debug\net6.0\ref\SmartHomeBackendUnitTests.dll
+C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\Database\test.db
