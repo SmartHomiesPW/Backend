@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHomeBackendIntegration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHomeBackendStressTests", "SmartHomeBackendStressTests\SmartHomeBackendStressTests.csproj", "{EBD81534-A2EF-43A0-B37C-0B842C0EF897}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8457493C-91D8-4ABA-9F46-B04B05CDCDC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C3200CBA-AE9C-4ADC-B0D3-774401D51885} = {8457493C-91D8-4ABA-9F46-B04B05CDCDC3}
+		{2FE3C49D-A946-41E3-8FF4-F2096CF44CB9} = {8457493C-91D8-4ABA-9F46-B04B05CDCDC3}
+		{EBD81534-A2EF-43A0-B37C-0B842C0EF897} = {8457493C-91D8-4ABA-9F46-B04B05CDCDC3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8C962684-4C9A-4EED-BC51-64BB08493507}
