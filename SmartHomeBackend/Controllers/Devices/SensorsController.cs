@@ -22,22 +22,22 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet("humidity")]
         public async Task<IActionResult> GetAllHumiditySensors(string boardId)
         {
-            List<HumiditySensor> lightsOnBoard = _deviceService.GetAllHumiditySensors(boardId, _context);
-            return Ok(lightsOnBoard);
+            List<HumiditySensor> humiditySensorsOnBoard = _deviceService.GetAllHumiditySensors(boardId, _context);
+            return Ok(humiditySensorsOnBoard);
         }
 
         [HttpGet("sunlight")]
         public async Task<IActionResult> GetAllSunlightSensors(string boardId)
         {
-            List<SunlightSensor> lightsOnBoard = _deviceService.GetAllSunlightSensors(boardId, _context);
-            return Ok(lightsOnBoard);
+            List<SunlightSensor> sunlightSensorsOnBoard = _deviceService.GetAllSunlightSensors(boardId, _context);
+            return Ok(sunlightSensorsOnBoard);
         }
 
         [HttpGet("temperature")]
         public async Task<IActionResult> GetAllTemperatureSensors(string boardId)
         {
-            List<TemperatureSensor> lightsOnBoard = _deviceService.GetAllTemperatureSensors(boardId, _context);
-            return Ok(lightsOnBoard);
+            List<TemperatureSensor> temperatureSensorsOnBoardBoard = _deviceService.GetAllTemperatureSensors(boardId, _context);
+            return Ok(temperatureSensorsOnBoardBoard);
         }
 
         [Route("humidity/{sensorId}")]
