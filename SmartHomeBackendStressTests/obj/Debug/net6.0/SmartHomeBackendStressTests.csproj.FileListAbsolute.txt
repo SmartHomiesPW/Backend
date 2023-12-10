@@ -10,10 +10,7 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\Micr
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\xunit.runner.utility.netcoreapp10.dll
-C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\Database\smart_home.db
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\Database\smart_home.db.sql
-C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\Database\test.db
-C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\Database\test.db.sql
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\SmartHomeBackendStressTests.deps.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\SmartHomeBackendStressTests.runtimeconfig.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendStressTests\bin\Debug\net6.0\SmartHomeBackendStressTests.dll

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Controllers.Devices;
 using SmartHomeBackend.Database;
+using SmartHomeBackend.Globals;
 using SmartHomeBackend.Models;
 using System.Text.Json;
 
@@ -22,11 +23,23 @@ namespace SmartHomeBackend.Services
         }
 
 
-        public List<SwitchableLight> GetAllLights(string boardId, SmartHomeDbContext context)
+        public List<SwitchableLight> GetAllSwitchableLights(string boardId, SmartHomeDbContext context)
         {
-
             return context.SwitchableLights.Where(sl => sl.System_Id == boardId).ToList();
+        }
 
+        public List<TemperatureSensor> GetAllTemperatureSensors(string boardId, SmartHomeDbContext context)
+        {
+            return context.TemperatureSensors.Where(hs => hs.System_Id == boardId).ToList();
+        }
+        public List<HumiditySensor> GetAllHumiditySensors(string boardId, SmartHomeDbContext context)
+        {
+            return context.HumiditySensors.Where(hs => hs.System_Id == boardId).ToList();
+        }
+
+        public List<SunlightSensor> GetAllSunlightSensors(string boardId, SmartHomeDbContext context)
+        {
+            return context.SunlightSensors.Where(hs => hs.System_Id == boardId).ToList();
         }
 
         public async Task<(HttpResponseMessage, JsonDocument)> SendHttpRequest(string url)

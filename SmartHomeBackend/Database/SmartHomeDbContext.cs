@@ -11,7 +11,9 @@ namespace SmartHomeBackend.Database
         public SmartHomeDbContext(DbContextOptions<SmartHomeDbContext> options) : base(options) { }
 
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Sensor> Sensors { get; set; }
+        public virtual DbSet<TemperatureSensor> TemperatureSensors { get; set; }
+        public virtual DbSet<HumiditySensor> HumiditySensors { get; set; }
+        public virtual DbSet<SunlightSensor> SunlightSensors { get; set; }
         public virtual DbSet<Models.System> Systems { get; set; }
         public virtual DbSet<SwitchableLight> SwitchableLights { get; set; }
     }

@@ -194,9 +194,7 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\appsettings.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\SmartHomeBackend.exe
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Microsoft.TestPlatform.PlatformAbstractions.dll
-C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Database\smart_home.db
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Database\smart_home.db.sql
-C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Database\test.db.sql
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\SmartHomeBackendIntegrationTests.deps.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\SmartHomeBackendIntegrationTests.runtimeconfig.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\SmartHomeBackendIntegrationTests.dll
@@ -369,4 +367,3 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\SmartHomeBackendIntegrationTests.pdb
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\SmartHomeBackendIntegrationTests.genruntimeconfig.cache
 C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\obj\Debug\net6.0\ref\SmartHomeBackendIntegrationTests.dll
-C:\Users\adria\Desktop\Backend\SmartHomeBackendIntegrationTests\bin\Debug\net6.0\Database\test.db
