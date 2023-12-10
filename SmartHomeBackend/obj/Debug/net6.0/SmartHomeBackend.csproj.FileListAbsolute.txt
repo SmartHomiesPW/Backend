@@ -131,7 +131,6 @@ C:\Users\adria\Desktop\smart_home_backend\SmartHomeBackend\bin\Debug\net6.0\runt
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\appsettings.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\SmartHomeBackend.exe
-C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\Database\smart_home.db.sql
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\SmartHomeBackend.deps.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\SmartHomeBackend.runtimeconfig.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackend\bin\Debug\net6.0\SmartHomeBackend.dll

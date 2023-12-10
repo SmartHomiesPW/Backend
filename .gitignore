@@ -3,3 +3,5 @@
 *.user
 _ReSharper.*
 packages
+bin
+obj
