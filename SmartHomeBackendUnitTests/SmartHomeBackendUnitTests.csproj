@@ -27,4 +27,13 @@
     <ProjectReference Include="..\SmartHomeBackend\SmartHomeBackend.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="test.db.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
