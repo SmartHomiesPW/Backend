@@ -10,8 +10,6 @@ namespace SmartHomeBackend.Models
         public string Switchable_Light_Id { get; set; }
         public string System_Id { get; set; }
         [ForeignKey("System_Id")]
-        public System System { get; set; }
-        public string Name { get; set; }
         public int Value { get; set; }
 
     }
