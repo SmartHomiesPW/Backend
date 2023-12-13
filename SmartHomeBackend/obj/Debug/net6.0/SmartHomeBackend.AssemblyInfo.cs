@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartHomeBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+547aef9c07a7c3607e0688d512f14e27748b9faf")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartHomeBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartHomeBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

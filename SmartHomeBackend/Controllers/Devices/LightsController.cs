@@ -62,8 +62,9 @@ namespace SmartHomeBackend.Controllers.Devices
 
             if (response.IsSuccessStatusCode)
             {
-                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
-                var light = array.Where(l => l.LightId == lightId).FirstOrDefault();
+                var text = jsonDocument.RootElement.GetRawText();
+                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
 
                 return Ok(light);
             }

@@ -4,7 +4,7 @@ namespace SmartHomeBackend.Models.Dto
 {
     public class SwitchableLightDto
     {
-        public int LightId { get; set; }
-        public bool IsOn { get; set; }
+        public int lightId { get; set; }
+        public bool isOn { get; set; }
     }
 }
