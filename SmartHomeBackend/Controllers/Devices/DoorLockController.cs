@@ -20,7 +20,7 @@ namespace SmartHomeBackend.Controllers.Devices
         public async Task<IActionResult> GetDoorLockProperties(int systemId, int boardId)
         {
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/door-lock";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);
@@ -36,7 +36,7 @@ namespace SmartHomeBackend.Controllers.Devices
         public async Task<IActionResult> GetDoorLockState(int systemId, int boardId)
         {
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/door-lock/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);

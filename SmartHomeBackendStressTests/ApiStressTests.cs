@@ -19,7 +19,7 @@ namespace SmartHomeBackendStressTests
             var tasks = new Task[NumberOfRequests];
             for (var i = 0; i < NumberOfRequests; i++)
             {
-                tasks[i] = ds.SendHttpRequest(BaseUrl);
+                tasks[i] = ds.SendHttpGetRequest(BaseUrl);
             }
             await Task.WhenAll(tasks);
 

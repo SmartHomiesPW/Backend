@@ -10,7 +10,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         {
             DeviceService ds = new DeviceService();
             string url = $"http://127.0.0.1:5000/api/system/1/board/1/devices/lights/1";
-            var (response, _) = await ds.SendHttpRequest(url);
+            var (response, _) = await ds.SendHttpGetRequest(url);
 
             Assert.True(response.IsSuccessStatusCode);
         }
@@ -20,7 +20,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         {
             DeviceService ds = new DeviceService();
             string url = $"http://127.0.0.1:5000/api/system/1/board/1/devices/lights/1/log";
-            var (response, _) = await ds.SendHttpRequest(url);
+            var (response, _) = await ds.SendHttpGetRequest(url);
 
             Assert.True(response.IsSuccessStatusCode);
         }
@@ -30,7 +30,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         {
             DeviceService ds = new DeviceService();
             string url = $"http://127.0.0.1:5000/api/system/1/board/1/devices/sensors/temperature/1";
-            var (response, _) = await ds.SendHttpRequest(url);
+            var (response, _) = await ds.SendHttpGetRequest(url);
 
             Assert.True(response.IsSuccessStatusCode);
         }
@@ -40,7 +40,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         {
             DeviceService ds = new DeviceService();
             string url = $"http://127.0.0.1:5000/api/system/1/board/1/devices/sensors/temperature/1/log";
-            var (response, _) = await ds.SendHttpRequest(url);
+            var (response, _) = await ds.SendHttpGetRequest(url);
 
             Assert.True(response.IsSuccessStatusCode);
         }

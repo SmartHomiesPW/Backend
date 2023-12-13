@@ -21,7 +21,7 @@ namespace SmartHomeBackend.Controllers.Devices
         public async Task<IActionResult> GetCameraProperties(int systemId, int boardId, int cameraId)
         {
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/cameras/{cameraId}";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);
@@ -37,7 +37,7 @@ namespace SmartHomeBackend.Controllers.Devices
         public async Task<IActionResult> GetCameraRecordings(int systemId, int boardId, int cameraId)
         {
             string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/cameras/{cameraId}/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);

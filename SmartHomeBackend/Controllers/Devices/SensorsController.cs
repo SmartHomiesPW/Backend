@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
+using SmartHomeBackend.Globals;
 using SmartHomeBackend.Models;
 using SmartHomeBackend.Services;
 using System.Text.Json;
@@ -26,11 +27,49 @@ namespace SmartHomeBackend.Controllers.Devices
             return Ok(humiditySensorsOnBoard);
         }
 
+        [Route("humidity/states")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllHumiditySensorsStates()
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(jsonDocument);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
+        }
+
         [HttpGet("sunlight")]
         public async Task<IActionResult> GetAllSunlightSensors(string boardId)
         {
             List<SunlightSensor> sunlightSensorsOnBoard = _deviceService.GetAllSunlightSensors(boardId, _context);
             return Ok(sunlightSensorsOnBoard);
+        }
+
+        [Route("sunlight/states")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllSunlightSensorsStates()
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/sensors/light";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(jsonDocument);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
         }
 
         [HttpGet("temperature")]
@@ -40,92 +79,15 @@ namespace SmartHomeBackend.Controllers.Devices
             return Ok(temperatureSensorsOnBoardBoard);
         }
 
-        [Route("humidity/{sensorId}")]
+        [Route("temperature/states")]
         [HttpGet]
-        public async Task<IActionResult> GetHumiditySensorProperties(int systemId, int boardId, int sensorId)
+        public async Task<IActionResult> GetAlltemperatureSensorsStates()
         {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/humidity/{sensorId}";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
-        }
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
 
-        [Route("humidity/{sensorId}/log")]
-        [HttpGet]
-        public async Task<IActionResult> GetHumiditySensorMeasurement(int systemId, int boardId, int sensorId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/humidity/{sensorId}/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
-        }
+            string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-        [Route("sunlight-intensity/{sensorId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetSunlightIntensitySensorProperties(int systemId, int boardId, int sensorId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/sunlight-intensity/{sensorId}";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
-        }
-
-        [Route("sunlight-intensity/{sensorId}/log")]
-        [HttpGet]
-        public async Task<IActionResult> GetSunlightIntensitySensorMeasurement(int systemId, int boardId, int sensorId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/sunlight-intensity/{sensorId}/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
-        }
-
-        [Route("temperature/{sensorId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetTemperatureSensorProperties(int systemId, int boardId, int sensorId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/temperature/{sensorId}";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
-        }
-
-        [Route("temperature/{sensorId}/log")]
-        [HttpGet]
-        public async Task<IActionResult> GetTemperatureSensorMeasurement(int systemId, int boardId, int sensorId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/sensors/temperature/{sensorId}/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);

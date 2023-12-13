@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
-using SmartHomeBackend.Globals;
 using SmartHomeBackend.Models;
 using SmartHomeBackend.Services;
+using SmartHomeBackend.Globals;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using SmartHomeBackend.Models.Dto;
+using System.Text;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
@@ -29,21 +32,15 @@ namespace SmartHomeBackend.Controllers.Devices
             return Ok(lightsOnBoard);
         }
 
-        [Route("{lightId}")]
+        [Route("states")]
         [HttpGet]
-        public async Task<IActionResult> ToggleLightState(int systemId, int boardId, int lightId)
+        public async Task<IActionResult> GetAllLightsStates()
         {
-            if (!_systemService.SystemExists(boardId.ToString()))
-            {
-                throw new HttpRequestException("System does not exist.");
-            }
-            if (!_deviceService.DeviceExistsInSystem(boardId.ToString(), lightId.ToString(), "light", _context))
-            {
-                throw new HttpRequestException("Light does not exist in system.");
-            }
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
 
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/lights/{lightId}";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            string url = $"{Strings.RPI_API_URL}/lights/states";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);
@@ -54,12 +51,40 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
-        [Route("{lightId}/log")]
+        [Route("states/{lightId}")]
         [HttpGet]
-        public async Task<IActionResult> GetLightValue(int systemId, int boardId, int lightId)
+        public async Task<IActionResult> GetOneLightState(int lightId)
         {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/lights/{lightId}/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpRequest(url);
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/lights/states";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
+                var light = array.Where(l => l.LightId == lightId).FirstOrDefault();
+
+                return Ok(light);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
+        }
+
+        [Route("states")]
+        [HttpPost]
+        public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+            string jsonData = JsonSerializer.Serialize(lightsStates);
+
+            HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            string url = $"{Strings.RPI_API_URL}/lights/states";
+            var (response, jsonDocument) = await _deviceService.SendHttpPostRequest(url, content);
+
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);

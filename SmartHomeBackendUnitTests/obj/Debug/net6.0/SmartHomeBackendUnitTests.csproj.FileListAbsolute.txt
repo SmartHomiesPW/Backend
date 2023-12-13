@@ -212,7 +212,6 @@ C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\SmartH
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\appsettings.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\SmartHomeBackend.exe
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\Microsoft.TestPlatform.PlatformAbstractions.dll
-C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\Database\smart_home.db.sql
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\SmartHomeBackendUnitTests.deps.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\SmartHomeBackendUnitTests.runtimeconfig.json
 C:\Users\adria\Desktop\Backend\SmartHomeBackendUnitTests\bin\Debug\net6.0\SmartHomeBackendUnitTests.dll
