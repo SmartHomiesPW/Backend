@@ -25,13 +25,6 @@ namespace SmartHomeBackend.Controllers.Devices
             _deviceService = deviceService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllLights(string boardId)
-        {
-            List<SwitchableLight> lightsOnBoard = _deviceService.GetAllSwitchableLights(boardId, _context);
-            return Ok(lightsOnBoard);
-        }
-
         [Route("states")]
         [HttpGet]
         public async Task<IActionResult> GetAllLightsStates()
