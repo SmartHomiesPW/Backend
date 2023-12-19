@@ -2,6 +2,7 @@
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Globals;
 using SmartHomeBackend.Models;
+using SmartHomeBackend.Models.Dto;
 using SmartHomeBackend.Services;
 using System.Text.Json;
 
@@ -46,6 +47,29 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        [Route("humidity/states/{sensorId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetOneHumiditySensorState(int sensorId)
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var text = jsonDocument.RootElement.GetRawText();
+                var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
+                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
+
+                return Ok(sensor);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
+        }
+
         [HttpGet("sunlight")]
         public async Task<IActionResult> GetAllSunlightSensors(string boardId)
         {
@@ -72,6 +96,29 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        [Route("sunlight/states/{sensorId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetOneSunlightSensorState(int sensorId)
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/sensors/sunlight";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var text = jsonDocument.RootElement.GetRawText();
+                var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
+                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
+
+                return Ok(sensor);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
+        }
+
         [HttpGet("temperature")]
         public async Task<IActionResult> GetAllTemperatureSensors(string boardId)
         {
@@ -91,6 +138,29 @@ namespace SmartHomeBackend.Controllers.Devices
             if (response.IsSuccessStatusCode)
             {
                 return Ok(jsonDocument);
+            }
+            else
+            {
+                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+            }
+        }
+
+        [Route("temperature/states/{sensorId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetOneTemperatureSensorState(int sensorId)
+        {
+            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
+
+            string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var text = jsonDocument.RootElement.GetRawText();
+                var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
+                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
+
+                return Ok(sensor);
             }
             else
             {
