@@ -29,8 +29,6 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAllLightsStates()
         {
-            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
-
             string url = $"{Strings.RPI_API_URL}/lights/states";
             var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -48,8 +46,6 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetOneLightState(int lightId)
         {
-            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
-
             string url = $"{Strings.RPI_API_URL}/lights/states";
             var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -71,22 +67,16 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPost]
         public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)
         {
-            // rpi url = database.extractUrlBasedOnSystemIdAndBoardId
-            string jsonData = JsonSerializer.Serialize(lightsStates);
-
-            HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-            string url = $"{Strings.RPI_API_URL}/lights/states";
-            var (response, jsonDocument) = await _deviceService.SendHttpPostRequest(url, content);
-
-            if (response.IsSuccessStatusCode)
+            foreach (var lightState in lightsStates)
             {
-                return Ok(jsonDocument);
+                string url = $"{Strings.RPI_API_URL}/lights/set/{lightState.lightId}/{(lightState.isOn ? 1 : 0)}";
+                var (response, _) = await _deviceService.SendHttpGetRequest(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                }
             }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
+            return Ok();
         }
     }
 }

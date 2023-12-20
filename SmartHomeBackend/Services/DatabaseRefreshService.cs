@@ -77,10 +77,10 @@ namespace SmartHomeBackend.Services
                     var temperaturesData = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(jsonDocument);
                     foreach (var temperatureData in temperaturesData)
                     {
-                        var sensor = _context.Set<TemperatureSensor>().Find(temperatureData.SensorId.ToString());
+                        var sensor = _context.Set<TemperatureSensor>().Find(temperatureData.sensorId.ToString());
                         if (sensor != null)
                         {
-                            sensor.Value = (decimal)temperatureData.Temperature;
+                            sensor.Value = (decimal)temperatureData.temperature;
                         }
                     }
                     _context.SaveChanges();

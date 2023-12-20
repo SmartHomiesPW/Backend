@@ -16,6 +16,12 @@ namespace SmartHomeBackend.Controllers.Devices
             _deviceService = deviceService;
         }
 
+        [HttpPut]
+        public async Task<IActionResult> SetAlarmState(int systemId, int boardId, int state)
+        {
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAlarmProperties(int systemId, int boardId)
         {

@@ -158,7 +158,7 @@ namespace SmartHomeBackend.Controllers.Devices
             {
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
-                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
+                var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
 
                 return Ok(sensor);
             }
