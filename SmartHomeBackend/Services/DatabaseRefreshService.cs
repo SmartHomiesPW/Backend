@@ -9,27 +9,20 @@ namespace SmartHomeBackend.Services
 {
     public class DatabaseRefreshService : BackgroundService
     {
-        private readonly ILogger<DatabaseRefreshService> _logger;
-        private readonly DeviceService _deviceService;
-        private readonly SmartHomeDbContext _context;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public DatabaseRefreshService(ILogger<DatabaseRefreshService> logger, DeviceService deviceService, SmartHomeDbContext context)
+        public DatabaseRefreshService(IServiceScopeFactory scopeFactory)
         {
-            _logger = logger;
-            _deviceService = deviceService;
-            _context = context;
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //while (!stoppingToken.IsCancellationRequested)
-            //{
-            //    RefreshDatabase();
-
-            //    _logger.LogInformation("Refreshing database at: {time}", DateTimeOffset.Now);
-
-            //    await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            //}
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                RefreshDatabase();
+            }
         }
 
         private void RefreshDatabase()
@@ -41,24 +34,25 @@ namespace SmartHomeBackend.Services
         private async void RefreshLightsData()
         {
             string url = $"{Strings.RPI_API_URL}/lights/states";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
+                var _context = scope.ServiceProvider.GetRequiredService<SmartHomeDbContext>();
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var lightsData = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
-                foreach(var lightData in lightsData)
+                if (response.IsSuccessStatusCode)
                 {
-                    var light = _context.Set<SwitchableLight>().Find(lightData.lightId.ToString());
-                    if (light != null)
+                    var lightsData = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
+                    foreach (var lightData in lightsData)
                     {
-                        light.Value = lightData.isOn ? 1 : 0;
+                        var light = _context.Set<SwitchableLight>().Find(lightData.lightId.ToString());
+                        if (light != null)
+                        {
+                            light.Value = lightData.isOn ? 1 : 0;
+                        }
                     }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new Exception();
             }
         }
 
@@ -72,60 +66,75 @@ namespace SmartHomeBackend.Services
         private async void RefreshTemperatureSensorsData()
         {
             string url = $"{Strings.RPI_API_URL}/sensors/temperature";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
+                var _context = scope.ServiceProvider.GetRequiredService<SmartHomeDbContext>();
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var temperaturesData = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
-                foreach (var temperatureData in temperaturesData)
+                if (response.IsSuccessStatusCode)
                 {
-                    // Add measure to new measures table
+                    var temperaturesData = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(jsonDocument);
+                    foreach (var temperatureData in temperaturesData)
+                    {
+                        var sensor = _context.Set<TemperatureSensor>().Find(temperatureData.SensorId.ToString());
+                        if (sensor != null)
+                        {
+                            sensor.Value = (decimal)temperatureData.Temperature;
+                        }
+                    }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new Exception();
             }
         }
 
         private async void RefreshSunlightSensorsData()
         {
             string url = $"{Strings.RPI_API_URL}/sensors/light";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
+                var _context = scope.ServiceProvider.GetRequiredService<SmartHomeDbContext>();
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var sunlightsData = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(jsonDocument);
-                foreach (var sunlightData in sunlightsData)
+                if (response.IsSuccessStatusCode)
                 {
-                    // Add measure to new measures table
+                    var sunlightsData = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(jsonDocument);
+                    foreach (var sunlightData in sunlightsData)
+                    {
+                        var sensor = _context.Set<TemperatureSensor>().Find(sunlightData.SensorId.ToString());
+                        if (sensor != null)
+                        {
+                            sensor.Value = (decimal)sunlightData.LightValue;
+                        }
+                    }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new Exception();
             }
         }
 
         private async void RefreshHumiditySensorsData()
         {
             string url = $"{Strings.RPI_API_URL}/sensors/humidity";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
+                var _context = scope.ServiceProvider.GetRequiredService<SmartHomeDbContext>();
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var humiditiesData = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(jsonDocument);
-                foreach (var humidityData in humiditiesData)
+                if (response.IsSuccessStatusCode)
                 {
-                    // Add measure to new measures table
+                    var humiditiesData = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(jsonDocument);
+                    foreach (var humidityData in humiditiesData)
+                    {
+                        var sensor = _context.Set<TemperatureSensor>().Find(humidityData.SensorId.ToString());
+                        if (sensor != null)
+                        {
+                            sensor.Value = (decimal)humidityData.Humidity;
+                        }
+                    }
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
-            }
-            else
-            {
-                throw new Exception();
             }
         }
     }
