@@ -34,12 +34,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
             if (response.IsSuccessStatusCode)
             {
-                return Ok(jsonDocument);
+                var text = jsonDocument.RootElement.GetRawText();
+                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                foreach (var light in array)
+                {
+                    var lightInDB = _context.SwitchableLights.Find(light.lightId);
+                    lightInDB.Value = light.isOn ? 1 : 0;
+                }
+                _context.SaveChanges();
             }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
+
+            return Ok(_context.SwitchableLights);
         }
 
         [Route("states/{lightId}")]
@@ -54,13 +59,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
                 var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
+                var lightInDB = _context.SwitchableLights.Find(lightId);
+                lightInDB.Value = light.isOn ? 1 : 0;
 
-                return Ok(light);
+                _context.SaveChanges();
             }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
+
+            return Ok(_context.HumiditySensors.Find(lightId));
         }
 
         [Route("states")]
