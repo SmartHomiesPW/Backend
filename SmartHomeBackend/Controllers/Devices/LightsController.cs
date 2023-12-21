@@ -65,11 +65,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 _context.SaveChanges();
             }
 
-            return Ok(_context.HumiditySensors.Find(lightId));
+            return Ok(_context.SwitchableLights.Find(lightId));
         }
 
         [Route("states")]
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)
         {
             foreach (var lightState in lightsStates)
@@ -79,8 +79,15 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (!response.IsSuccessStatusCode)
                 {
                     return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                } else
+                {
+                    var lightInDB = _context.SwitchableLights.Find(lightState.lightId);
+                    lightInDB.Value = lightState.isOn ? 1 : 0;
                 }
             }
+            
+            _context.SaveChanges();
+            
             return Ok();
         }
     }
