@@ -8,8 +8,8 @@ namespace SmartHomeBackend.Models
     {
         [Key]
         public string Sensor_Id { get; set; }
+        [ForeignKey("System")]
         public string System_Id { get; set; }
-        [ForeignKey("System_Id")]
         public string Name { get; set; }
         public string Details { get; set; }
         public decimal Value { get; set; }

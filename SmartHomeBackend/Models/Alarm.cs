@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHomeBackend.Models
 {
-    [Table("Switchable_Lights")]
-    public class SwitchableLight
+    [Table("Alarms")]
+    public class Alarm
     {
         [Key]
-        public string Switchable_Light_Id { get; set; }
+        public string Alarm_Id { get; set; }
         [ForeignKey("System")]
         public string System_Id { get; set; }
+        public int IsActive { get; set; }
+        public int IsTriggered { get; set; }
         public string Name { get; set; }
         public string Details { get; set; }
-        public int Value { get; set; }
-
+        public string AccessCode { get; set; }
     }
 }

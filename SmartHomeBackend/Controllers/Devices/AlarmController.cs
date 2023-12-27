@@ -2,55 +2,92 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Services;
 using System.Text.Json;
+using SmartHomeBackend.Globals;
+using SmartHomeBackend.Database;
+using SmartHomeBackend.Models.Dto;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/{systemId}/board/{boardId}/devices/alarm")]
+    [Route("api/system/1/board/1/devices/alarm")]
     [ApiController]
     public class AlarmController : ControllerBase
     {
         private readonly DeviceService _deviceService;
+        private readonly SmartHomeDbContext _context;
 
-        public AlarmController(DeviceService deviceService)
+        public AlarmController(SmartHomeDbContext context, DeviceService deviceService)
         {
             _deviceService = deviceService;
+            _context = context;
         }
 
+        [Route("stateRPI")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmState(int systemId, int boardId, int state)
+        public async Task<IActionResult> SetAlarmStateRPI([FromBody] AlarmStateDto alarmState)
         {
+            string alarmId = alarmState.Alarm_Id;
+            var alarmInDB = _context.Alarms.Find(alarmId);
+            alarmInDB.IsActive = alarmState.IsActive;
+            alarmInDB.IsTriggered = alarmState.IsTriggered;
+
+            _context.SaveChanges();
+
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAlarmProperties(int systemId, int boardId)
+        [Route("state")]
+        [HttpPut]
+        public async Task<IActionResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
         {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/alarm";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
+            string alarmId = alarmState.Alarm_Id;
+            var alarmInDB = _context.Alarms.Find(alarmId);
+            alarmInDB.IsActive = alarmState.IsActive;
+            alarmInDB.IsTriggered = alarmState.IsTriggered;
+
+            _context.SaveChanges();
+
+            return Ok();
+
+            //string url = $"{Strings.RPI_API_URL}/alarm";
+            //var (response, _) = await _deviceService.SendHttpGetRequest(url);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    return Ok(response);
+            //}else
+            //{
+            //    return StatusCode(500, $"Error: {response}");
+            //}
         }
 
-        [Route("log")]
-        [HttpGet]
-        public async Task<IActionResult> GetAlarmState(int systemId, int boardId)
+        [Route("properties")]
+        [HttpPut]
+        public async Task<IActionResult> SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
         {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/alarm/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
-            }
-            else
-            {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-            }
+            string alarmId = alarmProperties.Alarm_Id;
+            var alarmInDB = _context.Alarms.Find(alarmId);
+            alarmInDB.Name = alarmProperties.Name;
+            alarmInDB.Details = alarmProperties.Details;
+            alarmInDB.AccessCode = alarmProperties.AccessCode;
+
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [Route("data/{alarmId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAlarmData(string alarmId)
+        {
+            var alarmInDB = _context.Alarms.Find(alarmId);
+            return Ok(alarmInDB);
+        }
+
+        [Route("log/{alarmId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAlarmLog(string alarmId)
+        {
+            var alarmsLogsInDB = _context.AlarmTriggers.Where(at => at.Alarm_Id.Equals(alarmId));
+            return Ok(alarmsLogsInDB);
         }
     }
 }

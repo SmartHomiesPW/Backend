@@ -12,9 +12,14 @@ namespace SmartHomeBackend.Database
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<TemperatureSensor> TemperatureSensors { get; set; }
+        public virtual DbSet<TemperatureSensorLog> TemperatureSensorsLogs { get; set; }
         public virtual DbSet<HumiditySensor> HumiditySensors { get; set; }
+        public virtual DbSet<HumiditySensorLog> HumiditySensorsLogs { get; set; }
         public virtual DbSet<SunlightSensor> SunlightSensors { get; set; }
+        public virtual DbSet<SunlightSensorLog> SunlightSensorsLogs { get; set; }
         public virtual DbSet<Models.System> Systems { get; set; }
         public virtual DbSet<SwitchableLight> SwitchableLights { get; set; }
+        public virtual DbSet<Alarm> Alarms { get; set; }
+        public virtual DbSet<AlarmTrigger> AlarmTriggers { get; set; }
     }
 }
