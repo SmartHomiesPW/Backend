@@ -2,9 +2,8 @@
 {
     public class SunlightSensorMeasureDto
     {
-        public int Id { get; set; }
-        public double LightValue { get; set; }
-        public DateTime DateTime { get; set; }
-        public int SensorId { get; set; }
+        public int sensorId { get; set; }
+        public double lightValue { get; set; }
+        public string dateTime { get; set; }
     }
 }

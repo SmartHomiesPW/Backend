@@ -35,8 +35,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
                 foreach(var sensor in array)
                 {
-                    var sensorInDB = _context.HumiditySensors.Find(sensor.SensorId);
-                    sensorInDB.Value = (decimal)sensor.Humidity;
+                    var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString());
+                    sensorInDB.Value = (decimal)sensor.humidity;
                 }
                 _context.SaveChanges();
             }
@@ -56,14 +56,14 @@ namespace SmartHomeBackend.Controllers.Devices
             {
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
-                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
-                var sensorInDB = _context.HumiditySensors.Find(sensorId);
-                sensorInDB.Value = (decimal)sensor.Humidity;
+                var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
+                var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString());
+                sensorInDB.Value = (decimal)sensor.humidity;
 
                 _context.SaveChanges();
             }
             
-            return Ok(_context.HumiditySensors.Find(sensorId));
+            return Ok(_context.HumiditySensors.Find(sensorId.ToString()));
         }
 
         [Route("sunlight/states")]
@@ -80,8 +80,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
                 foreach (var sensor in array)
                 {
-                    var sensorInDB = _context.SunlightSensors.Find(sensor.SensorId);
-                    sensorInDB.Value = (decimal)sensor.LightValue;
+                    var sensorInDB = _context.SunlightSensors.Find(sensor.sensorId.ToString());
+                    sensorInDB.Value = (decimal)sensor.lightValue;
                 }
                 _context.SaveChanges();
             }
@@ -101,14 +101,14 @@ namespace SmartHomeBackend.Controllers.Devices
             {
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
-                var sensor = array.Where(l => l.SensorId == sensorId).FirstOrDefault();
-                var sensorInDB = _context.SunlightSensors.Find(sensorId);
-                sensorInDB.Value = (decimal)sensor.LightValue;
+                var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
+                var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString());
+                sensorInDB.Value = (decimal)sensor.lightValue;
 
                 _context.SaveChanges();
             }
 
-            return Ok(_context.HumiditySensors.Find(sensorId));
+            return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
         }
 
         [Route("temperature/states")]
@@ -125,13 +125,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
                 foreach (var sensor in array)
                 {
-                    var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId);
+                    var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId.ToString());
                     sensorInDB.Value = (decimal)sensor.temperature;
                 }
                 _context.SaveChanges();
             }
 
-            return Ok(_context.SunlightSensors);
+            return Ok(_context.TemperatureSensors);
         }
 
         [Route("temperature/states/{sensorId}")]
@@ -147,13 +147,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
                 var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                var sensorInDB = _context.SunlightSensors.Find(sensorId);
+                var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString());
                 sensorInDB.Value = (decimal)sensor.temperature;
 
                 _context.SaveChanges();
             }
 
-            return Ok(_context.HumiditySensors.Find(sensorId));
+            return Ok(_context.TemperatureSensors.Find(sensorId.ToString()));
         }
 
     }

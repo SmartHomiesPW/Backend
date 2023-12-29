@@ -2,10 +2,9 @@
 {
     public class HumiditySensorMeasureDto
     {
-        public int Id { get; set; }
-        public double Humidity { get; set; }
-        public DateTime DateTime { get; set; }
-        public int SensorId { get; set; }
+        public int sensorId { get; set; }
+        public double humidity { get; set; }
+        public string dateTime { get; set; }
 
     }
 }

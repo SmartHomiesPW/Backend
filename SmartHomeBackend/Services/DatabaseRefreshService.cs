@@ -48,7 +48,7 @@ namespace SmartHomeBackend.Services
                         var light = _context.Set<SwitchableLight>().Find(lightData.lightId.ToString());
                         if (light != null)
                         {
-                            light.Value = lightData.isOn ? 1 : 0;
+                            light.Value = lightData.isOn;
                         }
                     }
                     _context.SaveChanges();
@@ -102,10 +102,10 @@ namespace SmartHomeBackend.Services
                     var sunlightsData = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(jsonDocument);
                     foreach (var sunlightData in sunlightsData)
                     {
-                        var sensor = _context.Set<TemperatureSensor>().Find(sunlightData.SensorId.ToString());
+                        var sensor = _context.Set<TemperatureSensor>().Find(sunlightData.sensorId.ToString());
                         if (sensor != null)
                         {
-                            sensor.Value = (decimal)sunlightData.LightValue;
+                            sensor.Value = (decimal)sunlightData.lightValue;
                         }
                     }
                     _context.SaveChanges();
@@ -127,10 +127,10 @@ namespace SmartHomeBackend.Services
                     var humiditiesData = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(jsonDocument);
                     foreach (var humidityData in humiditiesData)
                     {
-                        var sensor = _context.Set<TemperatureSensor>().Find(humidityData.SensorId.ToString());
+                        var sensor = _context.Set<TemperatureSensor>().Find(humidityData.sensorId.ToString());
                         if (sensor != null)
                         {
-                            sensor.Value = (decimal)humidityData.Humidity;
+                            sensor.Value = (decimal)humidityData.humidity;
                         }
                     }
                     _context.SaveChanges();

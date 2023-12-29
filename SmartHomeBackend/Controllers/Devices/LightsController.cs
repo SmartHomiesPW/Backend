@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/{systemId}/board/{boardId}/devices/lights")]
+    [Route("api/system/1/board/1/devices/lights")]
     [ApiController]
     public class LightsController : ControllerBase
     {
@@ -38,8 +38,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
                 foreach (var light in array)
                 {
-                    var lightInDB = _context.SwitchableLights.Find(light.lightId);
-                    lightInDB.Value = light.isOn ? 1 : 0;
+                    var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString());
+                    lightInDB.Value = light.isOn;
                 }
                 _context.SaveChanges();
             }
@@ -59,13 +59,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 var text = jsonDocument.RootElement.GetRawText();
                 var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
                 var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
-                var lightInDB = _context.SwitchableLights.Find(lightId);
-                lightInDB.Value = light.isOn ? 1 : 0;
+                var lightInDB = _context.SwitchableLights.Find(lightId.ToString());
+                lightInDB.Value = light.isOn;
 
                 _context.SaveChanges();
             }
 
-            return Ok(_context.SwitchableLights.Find(lightId));
+            return Ok(_context.SwitchableLights.Find(lightId.ToString()));
         }
 
         [Route("states")]
@@ -74,21 +74,21 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             foreach (var lightState in lightsStates)
             {
-                string url = $"{Strings.RPI_API_URL}/lights/set/{lightState.lightId}/{(lightState.isOn ? 1 : 0)}";
+                string url = $"{Strings.RPI_API_URL}/lights/set/{lightState.lightId}/{lightState.isOn}";
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (!response.IsSuccessStatusCode)
                 {
                     return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
                 } else
                 {
-                    var lightInDB = _context.SwitchableLights.Find(lightState.lightId);
-                    lightInDB.Value = lightState.isOn ? 1 : 0;
+                    var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString());
+                    lightInDB.Value = lightState.isOn;
                 }
             }
             
             _context.SaveChanges();
             
-            return Ok();
+            return Ok(_context.SwitchableLights);
         }
     }
 }
