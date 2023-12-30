@@ -21,6 +21,10 @@ namespace SmartHomeBackend.Controllers.Devices
             _context = context;
         }
 
+        /// <summary>
+        /// Let's Raspberry Pi transfer the information about one of it's alarms state's change to the cloud.
+        /// </summary>
+        /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("stateRPI")]
         [HttpPut]
         public async Task<IActionResult> SetAlarmStateRPI([FromBody] AlarmStateDto alarmState)
@@ -32,9 +36,13 @@ namespace SmartHomeBackend.Controllers.Devices
 
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(alarmInDB);
         }
 
+        /// <summary>
+        /// Let's mobile app transfer the information about one of system alarms state's change to the cloud and to Raspberry Pi.
+        /// </summary>
+        /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("state")]
         [HttpPut]
         public async Task<IActionResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
@@ -51,6 +59,10 @@ namespace SmartHomeBackend.Controllers.Devices
             return Ok(alarmInDB);
         }
 
+        /// <summary>
+        /// Enables change of alarm's name, details and access code in the database.
+        /// </summary>
+        /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("properties")]
         [HttpPut]
         public async Task<IActionResult> SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
@@ -66,24 +78,34 @@ namespace SmartHomeBackend.Controllers.Devices
             return Ok(alarmInDB);
         }
 
+        /// <returns>Alarm's state in the database on success.</returns>
         [Route("{alarmId}")]
         [HttpGet]
         public async Task<IActionResult> GetAlarmFullInfo(string alarmId)
         {
+            // Call do rpi pozyskujący aktualne dane o alarmie
+            // Modyfikacja danych alarmu w bazie danych
+
             var alarmInDB = _context.Alarms.Find(alarmId);
             return Ok(alarmInDB);
         }
 
+        /// <returns>Full information about all alarm's sensors on success.</returns>
         [Route("{alarmId}/sensors")]
         [HttpGet]
         public async Task<IActionResult> GetAlarmSensors(string alarmId)
         {
             // Call do rpi pozyskujący stany czujników alarmu
+            // Modyfikacja danych czujników alarmu w bazie danych
 
             var alarmSensorsInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId));
             return Ok(alarmSensorsInDB);
         }
 
+        /// <summary>
+        /// Enables change of alarm's sensor state in the database and in Raspberry Pi
+        /// </summary>
+        /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
         [Route("{alarmId}/sensors")]
         [HttpPut]
         public async Task<IActionResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
