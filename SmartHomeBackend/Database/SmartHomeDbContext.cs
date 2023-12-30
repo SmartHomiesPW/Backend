@@ -20,6 +20,7 @@ namespace SmartHomeBackend.Database
         public virtual DbSet<Models.System> Systems { get; set; }
         public virtual DbSet<SwitchableLight> SwitchableLights { get; set; }
         public virtual DbSet<Alarm> Alarms { get; set; }
+        public virtual DbSet<AlarmSensor> AlarmSensors { get; set; }
         public virtual DbSet<AlarmTrigger> AlarmTriggers { get; set; }
     }
 }

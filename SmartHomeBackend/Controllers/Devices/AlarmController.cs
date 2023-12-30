@@ -39,6 +39,8 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
         {
+            // Call do rpi zmieniający stan całego modułu alarmu
+
             string alarmId = alarmState.Alarm_Id;
             var alarmInDB = _context.Alarms.Find(alarmId);
             alarmInDB.IsActive = alarmState.IsActive;
@@ -46,17 +48,7 @@ namespace SmartHomeBackend.Controllers.Devices
 
             _context.SaveChanges();
 
-            return Ok();
-
-            //string url = $"{Strings.RPI_API_URL}/alarm";
-            //var (response, _) = await _deviceService.SendHttpGetRequest(url);
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    return Ok(response);
-            //}else
-            //{
-            //    return StatusCode(500, $"Error: {response}");
-            //}
+            return Ok(alarmInDB);
         }
 
         [Route("properties")]
@@ -71,18 +63,46 @@ namespace SmartHomeBackend.Controllers.Devices
 
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(alarmInDB);
         }
 
-        [Route("data/{alarmId}")]
+        [Route("{alarmId}")]
         [HttpGet]
-        public async Task<IActionResult> GetAlarmData(string alarmId)
+        public async Task<IActionResult> GetAlarmFullInfo(string alarmId)
         {
             var alarmInDB = _context.Alarms.Find(alarmId);
             return Ok(alarmInDB);
         }
 
-        [Route("log/{alarmId}")]
+        [Route("{alarmId}/sensors")]
+        [HttpGet]
+        public async Task<IActionResult> GetAlarmSensors(string alarmId)
+        {
+            // Call do rpi pozyskujący stany czujników alarmu
+
+            var alarmSensorsInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId));
+            return Ok(alarmSensorsInDB);
+        }
+
+        [Route("{alarmId}/sensors")]
+        [HttpPut]
+        public async Task<IActionResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
+        {
+            // Call do rpi zmieniający stan czujnika alarmu
+
+            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
+                                        x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+            if (alarmSensorInDB != null)
+            {
+                alarmSensorInDB.Is_On = alarmSensor.isOn;
+                alarmSensorInDB.Movement_Detected = alarmSensor.movementDetected;
+                _context.SaveChanges();
+            }
+
+            return Ok(alarmSensorInDB);
+        }
+
+        [Route("{alarmId}/log")]
         [HttpGet]
         public async Task<IActionResult> GetAlarmLog(string alarmId)
         {
