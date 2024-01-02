@@ -30,21 +30,27 @@ namespace SmartHomeBackend.Controllers.Devices
         public async Task<IActionResult> GetAllLightsStates()
         {
             string url = $"{Strings.RPI_API_URL}/lights/states";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var text = jsonDocument.RootElement.GetRawText();
-                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
-                foreach (var light in array)
-                {
-                    var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString());
-                    lightInDB.Value = light.isOn;
-                }
-                _context.SaveChanges();
-            }
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            return Ok(_context.SwitchableLights);
+                if (response.IsSuccessStatusCode)
+                {
+                    var text = jsonDocument.RootElement.GetRawText();
+                    var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                    foreach (var light in array)
+                    {
+                        var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString());
+                        lightInDB.Value = light.isOn;
+                    }
+                    _context.SaveChanges();
+                }
+
+                return Ok(_context.SwitchableLights);
+            } catch
+            {
+                return Ok(_context.SwitchableLights);
+            }
         }
 
         [Route("states/{lightId}")]
