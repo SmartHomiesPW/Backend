@@ -6,8 +6,6 @@ namespace SmartHomeBackend.Database
 {
     public class SmartHomeDbContext : DbContext
     {
-
-        public SmartHomeDbContext(){ }
         public SmartHomeDbContext(DbContextOptions<SmartHomeDbContext> options) : base(options) { }
 
         public virtual DbSet<User> Users { get; set; }

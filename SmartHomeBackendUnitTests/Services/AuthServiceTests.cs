@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartHomeBackend.Database;
@@ -21,17 +22,20 @@ namespace SmartHomeBackendUnitTests.Services
         [Fact]
         public async void UserShouldBeAddedToDatabase()
         {
-            var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseSqlite("Data Source=test.db").Options;
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            using (var context = new SmartHomeDbContext(options))
+            var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
+                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+
+            using (var context = new SmartHomeDbContext(options.Options))
             {
-                var sqlCommand = $"DELETE FROM Users;";
-                context.Database.ExecuteSqlRaw(sqlCommand);
-                
+                context.Users.RemoveRange(context.Users.ToList());
+
                 var myService = new AuthService(context);
 
-                var result = await myService.CreateNewUser(new User { User_Id = "1", Email = "user1@wp.pl", Password="lolz" });
+                var result = await myService.CreateNewUser(new User { User_Id = "1", Email = "adek@test.pl", Password="lolz" });
                 Assert.IsTrue(await myService.VerifyUser(result));
             }
         }
@@ -39,17 +43,20 @@ namespace SmartHomeBackendUnitTests.Services
         [Fact]
         public async void UserShouldBeRemovedFromDatabase()
         {
-            var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseSqlite("Data Source=test.db").Options;
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            using (var context = new SmartHomeDbContext(options))
+            var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
+                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+
+            using (var context = new SmartHomeDbContext(options.Options))
             {
-                var sqlCommand = $"DELETE FROM Users;";
-                context.Database.ExecuteSqlRaw(sqlCommand);
+                context.Users.RemoveRange(context.Users.ToList());
 
                 var myService = new AuthService(context);
 
-                var user = new User { User_Id = "1", Email = "user1@wp.pl", Password = "lolz" };
+                var user = new User { User_Id = "1", Email = "adek@test.pl", Password = "lolz" };
                 
                 await myService.CreateNewUser(user);
                 await myService.RemoveUser(user);
