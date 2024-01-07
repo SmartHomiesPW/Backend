@@ -19,7 +19,7 @@ namespace SmartHomeBackend.Controllers.Auth
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto model)
         {
-            var user = _authService.CreateNewUser(model);
+            var user = await _authService.CreateNewUser(model);
 
             if (user != null)
             {
@@ -33,7 +33,7 @@ namespace SmartHomeBackend.Controllers.Auth
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            var user = _authService.FindUserFromLogin(model);
+            var user = await _authService.FindUserFromLogin(model);
 
             if (user != null)
             {
