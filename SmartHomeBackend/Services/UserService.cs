@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SmartHomeBackend.Database;
+﻿using SmartHomeBackend.Database;
 using SmartHomeBackend.Models;
 
 namespace SmartHomeBackend.Services
@@ -17,15 +16,15 @@ namespace SmartHomeBackend.Services
         {
             return _context.Users.ToList();
         }
-        
+
         public User GetUser(string id)
         {
-            return _context.Users.Where(u => u.User_Id.Equals(id)).First();
+            return _context.Users.Where(u => u.User_Id.ToString().Equals(id)).First();
         }
 
         public bool UserExists(string userId)
         {
-            return _context.Users.Any(u => u.User_Id.Equals(userId));
+            return _context.Users.Any(u => u.User_Id.ToString().Equals(userId));
         }
     }
 }

@@ -3,11 +3,6 @@ using Moq;
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Models;
 using SmartHomeBackend.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
@@ -20,9 +15,11 @@ namespace SmartHomeBackendUnitTests.Services
         [Fact]
         public void UserShouldBeFoundInDatabase()
         {
+            var testUser = new User() { User_Id = Guid.NewGuid(), Email = "w@pl.pl", Password = "www" };
+
             var itemsData = new List<User>
             {
-                new User(){User_Id="w", Email="w@wp.pl", Password="www"},
+                testUser
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<User>>();
@@ -36,17 +33,19 @@ namespace SmartHomeBackendUnitTests.Services
 
             var myService = new UserService(mockContext.Object);
 
-            var result = myService.UserExists("w");
+            var result = myService.UserExists(testUser.User_Id.ToString());
 
-            Assert.AreEqual(true, result); 
+            Assert.AreEqual(true, result);
         }
 
         [Fact]
         public void UserShouldNotBeFoundInDatabase()
         {
+            var testUser = new User() { User_Id = Guid.NewGuid(), Email = "w@test.pl", Password = "www" };
+
             var itemsData = new List<User>
             {
-                new User(){User_Id="w", Email="w@wp.pl", Password="www"},
+                testUser
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<User>>();
@@ -60,7 +59,7 @@ namespace SmartHomeBackendUnitTests.Services
 
             var myService = new UserService(mockContext.Object);
 
-            var result = myService.UserExists("u");
+            var result = myService.UserExists(Guid.NewGuid().ToString());
 
             Assert.AreEqual(false, result);
         }
@@ -69,9 +68,11 @@ namespace SmartHomeBackendUnitTests.Services
         public void TheFoundUserShouldHaveCorrectCredentials()
         {
             // Arrange
+            var testUser = new User() { User_Id = Guid.NewGuid(), Email = "w@test.pl", Password = "www" };
+
             var itemsData = new List<User>
             {
-                new User(){User_Id="testId", Email="test@wp.pl", Password="test123"},
+                testUser
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<User>>();
@@ -85,12 +86,12 @@ namespace SmartHomeBackendUnitTests.Services
 
             var myService = new UserService(mockContext.Object);
 
-            var user = myService.GetUser("testId");
-            var result = user.User_Id == itemsData.ElementAt(0).User_Id &&
-                user.Email == itemsData.ElementAt(0).Email &&
-                user.Password == itemsData.ElementAt(0).Password;
+            var user = myService.GetUser(testUser.User_Id.ToString());
+            var result = user.User_Id == testUser.User_Id
+                    && user.Email == testUser.Email
+                    && user.Password == testUser.Password;
 
-            Assert.AreEqual(true, result); 
+            Assert.AreEqual(true, result);
         }
 
         [Fact]
@@ -98,10 +99,10 @@ namespace SmartHomeBackendUnitTests.Services
         {
             var itemsData = new List<User>
             {
-                new User(),
-                new User(),
-                new User(),
-                new User()
+                new User() {User_Id = Guid.NewGuid(), Email = "1@test.pl", Password = "1"},
+                new User() {User_Id = Guid.NewGuid(), Email = "2@test.pl", Password = "2"},
+                new User() {User_Id = Guid.NewGuid(), Email = "3@test.pl", Password = "3"},
+                new User() {User_Id = Guid.NewGuid(), Email = "4@test.pl", Password = "4"}
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<User>>();

@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using SmartHomeBackend.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using SmartHomeBackend.Models.Dto;
 using SmartHomeBackend.Services;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace SmartHomeBackend.Controllers.Auth
 {
@@ -21,22 +17,30 @@ namespace SmartHomeBackend.Controllers.Auth
 
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] User model)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto model)
         {
-            var user = _authService.CreateNewUser(model);
-            return Ok(user.Result);
+            var user = await _authService.CreateNewUser(model);
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return StatusCode(400, $"An error occurred: User with given mail already exists");
         }
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] User model)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            if (await _authService.VerifyUser(model))
+            var user = await _authService.FindUserFromLogin(model);
+
+            if (user != null)
             {
-                return Ok(model);
+                return Ok(user);
             }
 
-            return StatusCode(400, $"An error occurred: Incorrect email or password");
+            return StatusCode(400, $"An error occurred: No user found");
         }
     }
 }
