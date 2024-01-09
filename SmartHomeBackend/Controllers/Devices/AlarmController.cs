@@ -25,9 +25,9 @@ namespace SmartHomeBackend.Controllers.Devices
         /// Let's Raspberry Pi transfer the information about one of it's alarms state's change to the cloud.
         /// </summary>
         /// <returns>Alarm's state in the database after operation on success.</returns>
-        [Route("stateRPI")]
+        [Route("stateRPi")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmStateRPI([FromBody] AlarmStateDto alarmState)
+        public async Task<IActionResult> SetAlarmStateRPi([FromBody] AlarmStateDto alarmState)
         {
             string alarmId = alarmState.Alarm_Id;
             var alarmInDB = _context.Alarms.Find(alarmId);
@@ -117,6 +117,27 @@ namespace SmartHomeBackend.Controllers.Devices
             if (alarmSensorInDB != null)
             {
                 alarmSensorInDB.Is_On = alarmSensor.isOn;
+                alarmSensorInDB.Movement_Detected = alarmSensor.movementDetected;
+                _context.SaveChanges();
+            }
+
+            return Ok(alarmSensorInDB);
+        }
+
+        /// <summary>
+        /// Enables change of alarm's sensor state in the database from Raspberry Pi's request
+        /// </summary>
+        /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
+        [Route("{alarmId}/sensorsRPi")]
+        [HttpPut]
+        public async Task<IActionResult> SetAlarmSensorStateRPi(string alarmId, [FromBody] AlarmSensorStateRPiDto alarmSensor)
+        {
+            // Call do rpi zmieniający stan czujnika alarmu
+
+            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) &&
+                                        x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+            if (alarmSensorInDB != null)
+            {
                 alarmSensorInDB.Movement_Detected = alarmSensor.movementDetected;
                 _context.SaveChanges();
             }
