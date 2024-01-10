@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Services;
-using System.Text.Json;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
@@ -9,6 +7,8 @@ namespace SmartHomeBackend.Controllers.Devices
     [ApiController]
     public class DoorLockController : ControllerBase
     {
+        // no idea if this should work - JP
+
         private readonly DeviceService _deviceService;
 
         public DoorLockController(DeviceService deviceService)

@@ -1,37 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
-using SmartHomeBackend.Models;
-using SmartHomeBackend.Services;
-using SmartHomeBackend.Globals;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using SmartHomeBackend.Models.Dto;
-using System.Text;
+using SmartHomeBackend.Services;
+using System.Text.Json;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/1/board/1/devices/lights")]
+    [Route("api/system/{systemId}/board/{boardId}/devices/lights")]
     [ApiController]
     public class LightsController : ControllerBase
     {
         private readonly SmartHomeDbContext _context;
-        private readonly SystemService _systemService;
         private readonly DeviceService _deviceService;
 
-        public LightsController(SmartHomeDbContext context, SystemService systemService, DeviceService deviceService)
+        public LightsController(SmartHomeDbContext context, DeviceService deviceService)
         {
             _context = context;
-            _systemService = systemService;
             _deviceService = deviceService;
         }
 
         [Route("states")]
         [HttpGet]
-        public async Task<IActionResult> GetAllLightsStates()
+        public async Task<IActionResult> GetAllLightsStates(string systemId, string boardId)
         {
-            string url = $"{Strings.RPI_API_URL}/lights/states";
             try
             {
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/lights/states";
+
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -47,7 +48,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
 
                 return Ok(_context.SwitchableLights);
-            } catch
+            }
+            catch
             {
                 return Ok(_context.SwitchableLights);
             }
@@ -55,9 +57,15 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("states/{lightId}")]
         [HttpGet]
-        public async Task<IActionResult> GetOneLightState(int lightId)
+        public async Task<IActionResult> GetOneLightState(string systemId, string boardId, int lightId)
         {
-            string url = $"{Strings.RPI_API_URL}/lights/states";
+            var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+            if (boardURL == null)
+            {
+                return StatusCode(400, "An error occured: System or Board not found");
+            }
+
+            string url = $"{boardURL}/lights/states";
             var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
             if (response.IsSuccessStatusCode)
@@ -76,24 +84,35 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("states")]
         [HttpPut]
-        public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)
+        public async Task<IActionResult> SetLightsStates(
+            string systemId,
+            string boardId,
+            [FromBody] SwitchableLightDto[] lightsStates
+            )
         {
             foreach (var lightState in lightsStates)
             {
-                string url = $"{Strings.RPI_API_URL}/lights/set/{lightState.lightId}/{lightState.isOn}";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/lights/set/{lightState.lightId}/{lightState.isOn}";
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (!response.IsSuccessStatusCode)
                 {
                     return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-                } else
+                }
+                else
                 {
                     var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString());
                     lightInDB.Value = lightState.isOn;
                 }
             }
-            
+
             _context.SaveChanges();
-            
+
             return Ok(_context.SwitchableLights);
         }
     }

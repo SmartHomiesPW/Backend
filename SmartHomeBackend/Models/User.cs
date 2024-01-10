@@ -12,5 +12,6 @@ namespace SmartHomeBackend.Models
         public required string Password { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public List<System> Systems { get; set; }
     }
 }

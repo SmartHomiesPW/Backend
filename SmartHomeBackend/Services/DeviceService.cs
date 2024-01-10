@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartHomeBackend.Controllers.Devices;
-using SmartHomeBackend.Database;
-using SmartHomeBackend.Globals;
+﻿using SmartHomeBackend.Database;
 using SmartHomeBackend.Models;
 using System.Text.Json;
 
@@ -14,7 +11,7 @@ namespace SmartHomeBackend.Services
             switch (deviceType)
             {
                 case "light":
-                    return context.SwitchableLights.Any(s => s.System_Id == boardId && s.Switchable_Light_Id == lightId);
+                    return context.SwitchableLights.Any(s => s.Board_Id == boardId && s.Switchable_Light_Id == lightId);
                 default:
                     break;
             }
@@ -25,21 +22,21 @@ namespace SmartHomeBackend.Services
 
         public List<SwitchableLight> GetAllSwitchableLights(string boardId, SmartHomeDbContext context)
         {
-            return context.SwitchableLights.Where(sl => sl.System_Id == boardId).ToList();
+            return context.SwitchableLights.Where(sl => sl.Board_Id == boardId).ToList();
         }
 
         public List<TemperatureSensor> GetAllTemperatureSensors(string boardId, SmartHomeDbContext context)
         {
-            return context.TemperatureSensors.Where(hs => hs.System_Id == boardId).ToList();
+            return context.TemperatureSensors.Where(hs => hs.Board_Id == boardId).ToList();
         }
         public List<HumiditySensor> GetAllHumiditySensors(string boardId, SmartHomeDbContext context)
         {
-            return context.HumiditySensors.Where(hs => hs.System_Id == boardId).ToList();
+            return context.HumiditySensors.Where(hs => hs.Board_Id == boardId).ToList();
         }
 
         public List<SunlightSensor> GetAllSunlightSensors(string boardId, SmartHomeDbContext context)
         {
-            return context.SunlightSensors.Where(hs => hs.System_Id == boardId).ToList();
+            return context.SunlightSensors.Where(hs => hs.Board_Id == boardId).ToList();
         }
 
         public async Task<(HttpResponseMessage, JsonDocument)> SendHttpPostRequest(string url, HttpContent content)

@@ -18,6 +18,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SystemService>();
 builder.Services.AddScoped<DeviceService>();
+builder.Services.AddScoped<BoardService>();
 // builder.Services.AddHostedService<DatabaseRefreshService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

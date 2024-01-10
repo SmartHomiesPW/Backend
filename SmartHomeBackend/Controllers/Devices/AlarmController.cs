@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SmartHomeBackend.Services;
-using System.Text.Json;
-using SmartHomeBackend.Globals;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Models.Dto;
+using SmartHomeBackend.Services;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/1/board/1/devices/alarm")]
+    [Route("api/system/{systemId}/board/{boardId}/devices/alarm")]
     [ApiController]
     public class AlarmController : ControllerBase
     {
@@ -27,7 +24,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("stateRPi")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmStateRPi([FromBody] AlarmStateDto alarmState)
+        public async Task<IActionResult> SetAlarmStateRPi(string systemId, string boardId, [FromBody] AlarmStateDto alarmState)
         {
             string alarmId = alarmState.Alarm_Id;
             var alarmInDB = _context.Alarms.Find(alarmId);
@@ -112,7 +109,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             // Call do rpi zmieniający stan czujnika alarmu
 
-            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
+            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) &&
                                         x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
             if (alarmSensorInDB != null)
             {

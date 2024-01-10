@@ -9,5 +9,6 @@ namespace SmartHomeBackend.Models
         [Key]
         public string System_Id { get; set; }
         public string Name { get; set; }
+        public List<User> Users { get; set; }
     }
 }

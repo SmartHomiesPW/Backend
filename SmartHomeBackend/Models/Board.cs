@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartHomeBackend.Models
 {
-    [Table("Humidity_Sensors")]
-    public class HumiditySensor
+    [Table("Boards")]
+    public class Board
     {
         [Key]
-        public string Sensor_Id { get; set; }
-        [ForeignKey("Board")]
         public string Board_Id { get; set; }
+        [ForeignKey("System")]
+        public string System_Id { get; set; }
+        [Required]
+        public string Board_URL { get; set; }
         public string Name { get; set; }
-        public string Details { get; set; }
-        public decimal Value { get; set; }
     }
 }

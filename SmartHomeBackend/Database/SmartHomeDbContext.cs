@@ -16,6 +16,7 @@ namespace SmartHomeBackend.Database
         public virtual DbSet<SunlightSensor> SunlightSensors { get; set; }
         public virtual DbSet<SunlightSensorLog> SunlightSensorsLogs { get; set; }
         public virtual DbSet<Models.System> Systems { get; set; }
+        public virtual DbSet<Board> Boards { get; set; }
         public virtual DbSet<SwitchableLight> SwitchableLights { get; set; }
         public virtual DbSet<Alarm> Alarms { get; set; }
         public virtual DbSet<AlarmSensor> AlarmSensors { get; set; }

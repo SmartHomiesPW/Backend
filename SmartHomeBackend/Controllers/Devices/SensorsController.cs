@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
-using SmartHomeBackend.Globals;
-using SmartHomeBackend.Models;
 using SmartHomeBackend.Models.Dto;
 using SmartHomeBackend.Services;
 using System.Text.Json;
@@ -23,11 +21,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("humidity/states")]
         [HttpGet]
-        public async Task<IActionResult> GetAllHumiditySensorsStates()
+        public async Task<IActionResult> GetAllHumiditySensorsStates(string systemId, string boardId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -52,11 +56,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("humidity/states/{sensorId}")]
         [HttpGet]
-        public async Task<IActionResult> GetOneHumiditySensorState(int sensorId)
+        public async Task<IActionResult> GetOneHumiditySensorState(string systemId, string boardId, int sensorId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -80,11 +90,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("sunlight/states")]
         [HttpGet]
-        public async Task<IActionResult> GetAllSunlightSensorsStates()
+        public async Task<IActionResult> GetAllSunlightSensorsStates(string systemId, string boardId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/light";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -109,11 +125,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("sunlight/states/{sensorId}")]
         [HttpGet]
-        public async Task<IActionResult> GetOneSunlightSensorState(int sensorId)
+        public async Task<IActionResult> GetOneSunlightSensorState(string systemId, string boardId, int sensorId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/light";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -128,7 +150,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
 
                 return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
-            }catch
+            }
+            catch
             {
                 return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
             }
@@ -136,11 +159,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("temperature/states")]
         [HttpGet]
-        public async Task<IActionResult> GetAlltemperatureSensorsStates()
+        public async Task<IActionResult> GetAlltemperatureSensorsStates(string systemId, string boardId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -165,11 +194,17 @@ namespace SmartHomeBackend.Controllers.Devices
 
         [Route("temperature/states/{sensorId}")]
         [HttpGet]
-        public async Task<IActionResult> GetOneTemperatureSensorState(int sensorId)
+        public async Task<IActionResult> GetOneTemperatureSensorState(string systemId, string boardId, int sensorId)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+                var boardURL = BoardService.GetBoardURL(systemId, boardId, _context);
+                if (boardURL == null)
+                {
+                    return StatusCode(400, "An error occured: System or Board not found");
+                }
+
+                string url = $"{boardURL}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
