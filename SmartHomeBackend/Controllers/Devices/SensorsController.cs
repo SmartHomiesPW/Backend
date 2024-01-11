@@ -40,7 +40,12 @@ namespace SmartHomeBackend.Controllers.Devices
                     var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
                     foreach (var sensor in array)
                     {
-                        var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString());
+                        var sensorInDB = _context.HumiditySensors.FirstOrDefault(
+                            x => x.Board_Id == boardId && x.Sensor_Id == sensor.sensorId.ToString());
+                        if (sensorInDB == null)
+                        {
+                            return StatusCode(400, "An error occured: Sensor on Board not found");
+                        }
                         sensorInDB.Value = (decimal)sensor.humidity;
                     }
                     _context.SaveChanges();
