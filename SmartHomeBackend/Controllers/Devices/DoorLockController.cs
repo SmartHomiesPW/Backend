@@ -25,7 +25,7 @@ namespace SmartHomeBackend.Controllers.Devices
         [Route("set/{isOn}")]
         public async Task<IActionResult> SetDoorLockState(int isOn)
         {
-            string url = "";
+            string url;
             if (isOn == 1)
             {
                 url = $"{Strings.RPI_API_URL}/door-lock/set/1";
@@ -36,7 +36,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
             try
             {
-                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+                await _deviceService.SendHttpGetRequest(url);
 
                 return Ok("Success!");
             }
