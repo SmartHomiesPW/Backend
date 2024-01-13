@@ -20,5 +20,6 @@ namespace SmartHomeBackend.Database
         public virtual DbSet<Alarm> Alarms { get; set; }
         public virtual DbSet<AlarmSensor> AlarmSensors { get; set; }
         public virtual DbSet<AlarmTrigger> AlarmTriggers { get; set; }
+        public virtual DbSet<DoorLock> DoorLocks { get; set; }
     }
 }

@@ -21,6 +21,13 @@ namespace SmartHomeBackend.Controllers.Devices
             _context = context;
         }
 
+        [Route("states")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDoorLocksStates()
+        {
+            return Ok(_context.DoorLocks);
+        }
+
         [HttpPut]
         [Route("set/{isOn}")]
         public async Task<IActionResult> SetDoorLockState(int isOn)
@@ -29,15 +36,16 @@ namespace SmartHomeBackend.Controllers.Devices
             if (isOn == 1)
             {
                 url = $"{Strings.RPI_API_URL}/door-lock/set/1";
+                _context.DoorLocks.ElementAt(0).IsOn = 1;
             }
             else
             {
                 url = $"{Strings.RPI_API_URL}/door-lock/set/0";
+                _context.DoorLocks.ElementAt(0).IsOn = 0;
             }
             try
             {
                 await _deviceService.SendHttpGetRequest(url);
-
                 return Ok("Success!");
             }
             catch
