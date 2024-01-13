@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Globals;
@@ -32,21 +33,28 @@ namespace SmartHomeBackend.Controllers.Devices
         [Route("set/{isOn}")]
         public async Task<IActionResult> SetDoorLockState(int isOn)
         {
-            string url;
-            if (isOn == 1)
-            {
-                url = $"{Strings.RPI_API_URL}/door-lock/set/1";
-                _context.DoorLocks.ElementAt(0).IsOn = 1;
-            }
-            else
-            {
-                url = $"{Strings.RPI_API_URL}/door-lock/set/0";
-                _context.DoorLocks.ElementAt(0).IsOn = 0;
-            }
             try
             {
-                await _deviceService.SendHttpGetRequest(url);
-                return Ok("Success!");
+                string url;
+                if (isOn == 1)
+                {
+                    url = $"{Strings.RPI_API_URL}/door-lock/set/1";
+                    _context.DoorLocks.ElementAt(0).IsOn = 1;
+                }
+                else
+                {
+                    url = $"{Strings.RPI_API_URL}/door-lock/set/0";
+                    _context.DoorLocks.ElementAt(0).IsOn = 0;
+                }
+                var (response, _) = await _deviceService.SendHttpGetRequest(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    _context.SaveChanges();
+                    return Ok("Success!");
+                } else
+                {
+                    return Ok("Something went wrong...");
+                }
             }
             catch
             {
