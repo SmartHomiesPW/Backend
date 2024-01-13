@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartHomeBackend.Database;
+using SmartHomeBackend.Globals;
+using SmartHomeBackend.Models.Dto;
 using SmartHomeBackend.Services;
 using System.Text.Json;
 
@@ -9,41 +12,37 @@ namespace SmartHomeBackend.Controllers.Devices
     [ApiController]
     public class DoorLockController : ControllerBase
     {
+        private readonly SmartHomeDbContext _context;
         private readonly DeviceService _deviceService;
 
-        public DoorLockController(DeviceService deviceService)
+        public DoorLockController(DeviceService deviceService, SmartHomeDbContext context)
         {
             _deviceService = deviceService;
+            _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetDoorLockProperties(int systemId, int boardId)
+        [HttpPut]
+        [Route("set/{isOn}")]
+        public async Task<IActionResult> SetDoorLockState(int isOn)
         {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/door-lock";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-            if (response.IsSuccessStatusCode)
+            string url = "";
+            if (isOn == 1)
             {
-                return Ok(jsonDocument);
+                url = $"{Strings.RPI_API_URL}/door-lock/set/1";
             }
             else
             {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                url = $"{Strings.RPI_API_URL}/door-lock/set/0";
             }
-        }
+            try
+            {
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-        [Route("log")]
-        [HttpGet]
-        public async Task<IActionResult> GetDoorLockState(int systemId, int boardId)
-        {
-            string url = $"http://127.0.0.1:5000/api/system/{systemId}/board/{boardId}/devices/door-lock/log";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok(jsonDocument);
+                return Ok("Success!");
             }
-            else
+            catch
             {
-                return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                return Ok("Something went wrong...");
             }
         }
     }
