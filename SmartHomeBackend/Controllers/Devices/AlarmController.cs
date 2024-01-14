@@ -93,13 +93,31 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Full information about all alarm's sensors on success.</returns>
         [Route("{alarmId}/sensors")]
         [HttpGet]
-        public async Task<IActionResult> GetAlarmSensors(string alarmId)
+        public async Task<IActionResult> GetAlarmSensorsStates(string alarmId)
         {
-            // Call do rpi pozyskujący stany czujników alarmu
-            // Modyfikacja danych czujników alarmu w bazie danych
+            string url = $"{Strings.RPI_API_URL}/alarm/get";
+            try
+            {
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-            var alarmSensorsInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId));
-            return Ok(alarmSensorsInDB);
+                if (response.IsSuccessStatusCode)
+                {
+                    var text = jsonDocument.RootElement.GetRawText();
+                    var array = JsonSerializer.Deserialize<AlarmSensorStateDtoBoardGet[]>(text);
+                    foreach (var alarmSensor in array)
+                    {
+                        var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+                        alarmSensorInDB.Is_On = alarmSensor.isOn;
+                    }
+                    _context.SaveChanges();
+                }
+
+                return Ok(_context.AlarmSensors);
+            }
+            catch
+            {
+                return Ok(_context.AlarmSensors);
+            }
         }
 
         /// <summary>
@@ -110,35 +128,49 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
         {
-            // Call do rpi zmieniający stan czujnika alarmu
+            string url = $"{Strings.RPI_API_URL}/alarm/set/{alarmSensor.alarmSensorId}/{alarmSensor.isOn}";
 
-            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
-                                        x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
-            if (alarmSensorInDB != null)
+            try
             {
-                alarmSensorInDB.Is_On = alarmSensor.isOn;
-                alarmSensorInDB.Movement_Detected = alarmSensor.movementDetected;
-                _context.SaveChanges();
+                var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
+                                        x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+                if (alarmSensorInDB != null)
+                {
+                    var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        alarmSensorInDB.Is_On = alarmSensor.isOn;
+
+                        alarmSensorInDB.Movement_Detected = alarmSensor.isOn == 0 ? 0 : alarmSensor.movementDetected;
+
+                        _context.SaveChanges();
+                    }
+                }
+                return Ok(_context.AlarmSensors);
+            }
+            catch
+            {
+                return Ok(_context.AlarmSensors);
             }
 
-            return Ok(alarmSensorInDB);
         }
 
         /// <summary>
         /// Enables change of alarm's sensor state in the database from Raspberry Pi's request
         /// </summary>
         /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
-        [Route("{alarmId}/sensorsRPi")]
+        [Route("sensorsRPi")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmSensorStateRPi(string alarmId, [FromBody] AlarmSensorStateRPiDto alarmSensor)
+        public async Task<IActionResult> SetAlarmSensorStateRPi([FromBody] AlarmSensorStateDtoBoardTrigger alarmSensor)
         {
             // Call do rpi zmieniający stan czujnika alarmu
 
-            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) &&
+            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmSensor.alarmId) &&
                                         x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
             if (alarmSensorInDB != null)
             {
-                alarmSensorInDB.Movement_Detected = alarmSensor.movementDetected;
+                alarmSensorInDB.Movement_Detected = 1;
                 _context.SaveChanges();
             }
 
