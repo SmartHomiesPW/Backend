@@ -10,18 +10,16 @@ using System.Text;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/1/board/1/devices/lights")]
+    [Route("api/system/{systemId}/board/{boardId}/devices/lights")]
     [ApiController]
     public class LightsController : ControllerBase
     {
         private readonly SmartHomeDbContext _context;
-        private readonly SystemService _systemService;
         private readonly DeviceService _deviceService;
 
-        public LightsController(SmartHomeDbContext context, SystemService systemService, DeviceService deviceService)
+        public LightsController(SmartHomeDbContext context, DeviceService deviceService)
         {
             _context = context;
-            _systemService = systemService;
             _deviceService = deviceService;
         }
 
@@ -29,7 +27,7 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAllLightsStates()
         {
-            string url = $"{Strings.RPI_API_URL}/lights/states";
+            string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/states";
             try
             {
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -44,12 +42,16 @@ namespace SmartHomeBackend.Controllers.Devices
                         lightInDB.Value = light.isOn;
                     }
                     _context.SaveChanges();
+                    
+                    return Ok(_context.SwitchableLights);
+                } else
+                {
+                    throw new Exception("Couldn't get all lights states.");
                 }
-
-                return Ok(_context.SwitchableLights);
-            } catch
+            }
+            catch (Exception ex)
             {
-                return Ok(_context.SwitchableLights);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -57,44 +59,61 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetOneLightState(int lightId)
         {
-            string url = $"{Strings.RPI_API_URL}/lights/states";
-            var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
-
-            if (response.IsSuccessStatusCode)
+            string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/states";
+            try
             {
-                var text = jsonDocument.RootElement.GetRawText();
-                var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
-                var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
-                var lightInDB = _context.SwitchableLights.Find(lightId.ToString());
-                lightInDB.Value = light.isOn;
+                var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
-                _context.SaveChanges();
+                if (response.IsSuccessStatusCode)
+                {
+                    var text = jsonDocument.RootElement.GetRawText();
+                    var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                    var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
+                    var lightInDB = _context.SwitchableLights.Find(lightId.ToString());
+                    lightInDB.Value = light.isOn;
+
+                    _context.SaveChanges();
+                    
+                    return Ok(_context.SwitchableLights.Find(lightId.ToString()));
+                } else
+                {
+                    throw new Exception("Couldn't get a light state.");
+                }
+
             }
-
-            return Ok(_context.SwitchableLights.Find(lightId.ToString()));
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [Route("states")]
         [HttpPut]
         public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)
         {
-            foreach (var lightState in lightsStates)
-            {
-                string url = $"{Strings.RPI_API_URL}/lights/set/{lightState.lightId}/{lightState.isOn}";
-                var (response, _) = await _deviceService.SendHttpGetRequest(url);
-                if (!response.IsSuccessStatusCode)
+            try {
+                foreach (var lightState in lightsStates)
                 {
-                    return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
-                } else
-                {
-                    var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString());
-                    lightInDB.Value = lightState.isOn;
+                    string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{lightState.isOn}";
+                    var (response, _) = await _deviceService.SendHttpGetRequest(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                    } else
+                    {
+                        var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString());
+                        lightInDB.Value = lightState.isOn;
+                    }
                 }
+            
+                _context.SaveChanges();
+            
+                return Ok(_context.SwitchableLights);
             }
-            
-            _context.SaveChanges();
-            
-            return Ok(_context.SwitchableLights);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

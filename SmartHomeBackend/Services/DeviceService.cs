@@ -46,18 +46,11 @@ namespace SmartHomeBackend.Services
         {
             using (HttpClient client = new HttpClient())
             {
-                try
-                {
-                    HttpResponseMessage response = await client.PostAsync(url, content);
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var jsonDocument = JsonDocument.Parse(jsonResponse);
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var jsonDocument = JsonDocument.Parse(jsonResponse);
 
-                    return (response, jsonDocument);
-                }
-                catch (HttpRequestException e)
-                {
-                    throw e;
-                }
+                return (response, jsonDocument);
             }
         }
 
@@ -65,18 +58,11 @@ namespace SmartHomeBackend.Services
         {
             using (HttpClient client = new HttpClient())
             {
-                try
-                {
-                    HttpResponseMessage response = await client.GetAsync(url);
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var jsonDocument = JsonDocument.Parse(jsonResponse);
+                HttpResponseMessage response = await client.GetAsync(url);
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var jsonDocument = JsonDocument.Parse(jsonResponse);
 
-                    return (response, jsonDocument);
-                }
-                catch (HttpRequestException e)
-                {
-                    throw e;
-                }
+                return (response, jsonDocument);
             }
         }
     }

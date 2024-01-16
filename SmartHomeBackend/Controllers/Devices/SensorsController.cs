@@ -27,7 +27,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -40,13 +40,17 @@ namespace SmartHomeBackend.Controllers.Devices
                         sensorInDB.Value = (decimal)sensor.humidity;
                     }
                     _context.SaveChanges();
+                    
+                    return Ok(_context.HumiditySensors);
+                } else
+                {
+                    throw new Exception("Couldn't get all humidity sensors states.");
                 }
 
-                return Ok(_context.HumiditySensors);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.HumiditySensors);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -56,7 +60,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -68,13 +72,18 @@ namespace SmartHomeBackend.Controllers.Devices
                     sensorInDB.Value = (decimal)sensor.humidity;
 
                     _context.SaveChanges();
+                    
+                    return Ok(_context.HumiditySensors.Find(sensorId.ToString()));
+                }
+                else
+                {
+                    throw new Exception("Couldn't get a humidity sensor state.");
                 }
 
-                return Ok(_context.HumiditySensors.Find(sensorId.ToString()));
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.HumiditySensors.Find(sensorId.ToString()));
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -84,7 +93,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/light";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -97,13 +106,17 @@ namespace SmartHomeBackend.Controllers.Devices
                         sensorInDB.Value = (decimal)sensor.lightValue;
                     }
                     _context.SaveChanges();
+                    
+                    return Ok(_context.SunlightSensors);
                 }
-
-                return Ok(_context.SunlightSensors);
+                else
+                {
+                    throw new Exception("Couldn't get all sunlight sensors states.");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.SunlightSensors);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -113,7 +126,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/light";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -125,22 +138,28 @@ namespace SmartHomeBackend.Controllers.Devices
                     sensorInDB.Value = (decimal)sensor.lightValue;
 
                     _context.SaveChanges();
+                    
+                    return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
+                }
+                else
+                {
+                    throw new Exception("Couldn't get a sunlight sensor state.");
                 }
 
-                return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
-            }catch
+            }
+            catch (Exception ex)
             {
-                return Ok(_context.SunlightSensors.Find(sensorId.ToString()));
+                return StatusCode(500, ex.Message);
             }
         }
 
         [Route("temperature/states")]
         [HttpGet]
-        public async Task<IActionResult> GetAlltemperatureSensorsStates()
+        public async Task<IActionResult> GetAllTemperatureSensorsStates()
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -153,13 +172,15 @@ namespace SmartHomeBackend.Controllers.Devices
                         sensorInDB.Value = (decimal)sensor.temperature;
                     }
                     _context.SaveChanges();
+                    return Ok(_context.TemperatureSensors);
+                } else
+                {
+                    throw new Exception("Couldn't get all temperature sensors states.");
                 }
-
-                return Ok(_context.TemperatureSensors);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.TemperatureSensors);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -169,7 +190,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -181,13 +202,18 @@ namespace SmartHomeBackend.Controllers.Devices
                     sensorInDB.Value = (decimal)sensor.temperature;
 
                     _context.SaveChanges();
+                    
+                    return Ok(_context.TemperatureSensors.Find(sensorId.ToString()));
+                }
+                else
+                {
+                    throw new Exception("Couldn't get a temperature sensor state.");
                 }
 
-                return Ok(_context.TemperatureSensors.Find(sensorId.ToString()));
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.TemperatureSensors.Find(sensorId.ToString()));
+                return StatusCode(500, ex.Message);
             }
         }
 

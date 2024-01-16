@@ -8,7 +8,7 @@ using SmartHomeBackend.Models.Dto;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
-    [Route("api/system/1/board/1/devices/alarm")]
+    [Route("api/system/{systemId}/board/{boardId}/devices/alarm")]
     [ApiController]
     public class AlarmController : ControllerBase
     {
@@ -29,14 +29,21 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmStateRPi([FromBody] AlarmStateDto alarmState)
         {
-            string alarmId = alarmState.Alarm_Id;
-            var alarmInDB = _context.Alarms.Find(alarmId);
-            alarmInDB.IsActive = alarmState.IsActive;
-            alarmInDB.IsTriggered = alarmState.IsTriggered;
+            try
+            {
+                string alarmId = alarmState.Alarm_Id;
+                var alarmInDB = _context.Alarms.Find(alarmId);
+                alarmInDB.IsActive = alarmState.IsActive;
+                alarmInDB.IsTriggered = alarmState.IsTriggered;
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return Ok(alarmInDB);
+                return Ok(alarmInDB);
+
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -47,16 +54,21 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
         {
-            // Call do rpi zmieniający stan całego modułu alarmu
+            try
+            {
+                string alarmId = alarmState.Alarm_Id;
+                var alarmInDB = _context.Alarms.Find(alarmId);
+                alarmInDB.IsActive = alarmState.IsActive;
+                alarmInDB.IsTriggered = alarmState.IsTriggered;
 
-            string alarmId = alarmState.Alarm_Id;
-            var alarmInDB = _context.Alarms.Find(alarmId);
-            alarmInDB.IsActive = alarmState.IsActive;
-            alarmInDB.IsTriggered = alarmState.IsTriggered;
+                _context.SaveChanges();
 
-            _context.SaveChanges();
-
-            return Ok(alarmInDB);
+                return Ok(alarmInDB);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -67,15 +79,21 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
         {
-            string alarmId = alarmProperties.Alarm_Id;
-            var alarmInDB = _context.Alarms.Find(alarmId);
-            alarmInDB.Name = alarmProperties.Name;
-            alarmInDB.Details = alarmProperties.Details;
-            alarmInDB.AccessCode = alarmProperties.AccessCode;
+            try { 
+                string alarmId = alarmProperties.Alarm_Id;
+                var alarmInDB = _context.Alarms.Find(alarmId);
+                alarmInDB.Name = alarmProperties.Name;
+                alarmInDB.Details = alarmProperties.Details;
+                alarmInDB.AccessCode = alarmProperties.AccessCode;
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return Ok(alarmInDB);
+                return Ok(alarmInDB);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <returns>Alarm's state in the database on success.</returns>
@@ -85,9 +103,15 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             // Call do rpi pozyskujący aktualne dane o alarmie
             // Modyfikacja danych alarmu w bazie danych
-
-            var alarmInDB = _context.Alarms.Find(alarmId);
-            return Ok(alarmInDB);
+            try
+            {
+                var alarmInDB = _context.Alarms.Find(alarmId);
+                return Ok(alarmInDB);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <returns>Full information about all alarm's sensors on success.</returns>
@@ -95,7 +119,7 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAlarmSensorsStates(string alarmId)
         {
-            string url = $"{Strings.RPI_API_URL}/alarm/get";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/get";
             try
             {
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -114,9 +138,9 @@ namespace SmartHomeBackend.Controllers.Devices
 
                 return Ok(_context.AlarmSensors);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.AlarmSensors);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -128,7 +152,7 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
         {
-            string url = $"{Strings.RPI_API_URL}/alarm/set/{alarmSensor.alarmSensorId}/{alarmSensor.isOn}";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/set/{alarmSensor.alarmSensorId}/{alarmSensor.isOn}";
 
             try
             {
@@ -149,11 +173,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
                 return Ok(_context.AlarmSensors);
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(_context.AlarmSensors);
+                return StatusCode(500, ex.Message);
             }
-
         }
 
         /// <summary>
@@ -164,25 +187,35 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmSensorStateRPi([FromBody] AlarmSensorStateDtoBoardTrigger alarmSensor)
         {
-            // Call do rpi zmieniający stan czujnika alarmu
+            try { 
+                var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmSensor.alarmId) &&
+                                            x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+                if (alarmSensorInDB != null)
+                {
+                    alarmSensorInDB.Movement_Detected = 1;
+                    _context.SaveChanges();
+                }
 
-            var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmSensor.alarmId) &&
-                                        x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
-            if (alarmSensorInDB != null)
-            {
-                alarmSensorInDB.Movement_Detected = 1;
-                _context.SaveChanges();
+                return Ok(alarmSensorInDB);
             }
-
-            return Ok(alarmSensorInDB);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [Route("{alarmId}/log")]
         [HttpGet]
         public async Task<IActionResult> GetAlarmLog(string alarmId)
         {
-            var alarmsLogsInDB = _context.AlarmTriggers.Where(at => at.Alarm_Id.Equals(alarmId));
-            return Ok(alarmsLogsInDB);
+            try { 
+                var alarmsLogsInDB = _context.AlarmTriggers.Where(at => at.Alarm_Id.Equals(alarmId));
+                return Ok(alarmsLogsInDB);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
