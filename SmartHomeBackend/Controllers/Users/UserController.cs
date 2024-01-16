@@ -18,16 +18,35 @@ namespace SmartHomeBackend.Controllers.Users
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            List<User> users = _userService.GetAllUsers();
-            return Ok(users);
+            try
+            {
+                List<User> users = _userService.GetAllUsers();
+                return Ok(users);
+            } catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [Route("{userId}")]
         [HttpGet]
         public async Task<IActionResult> GetUserWithId(string userId)
         {
-            User user = _userService.GetUser(userId);
-            return Ok(user);
+            try
+            {
+                User user = _userService.GetUser(userId);
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return StatusCode(400, $"An error occurred: User with given id doesn't exist.");
+                }
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

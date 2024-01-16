@@ -26,7 +26,13 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAllDoorLocksStates()
         {
-            return Ok(_context.DoorLocks);
+            try
+            {
+                return Ok(_context.DoorLocks);
+            } catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut]
@@ -38,27 +44,27 @@ namespace SmartHomeBackend.Controllers.Devices
                 string url;
                 if (isOn == 1)
                 {
-                    url = $"{Strings.RPI_API_URL}/door-lock/set/1";
+                    url = $"{Strings.RPI_API_URL_ADRIAN}/door-lock/set/1";
                     _context.DoorLocks.ElementAt(0).IsOn = 1;
                 }
                 else
                 {
-                    url = $"{Strings.RPI_API_URL}/door-lock/set/0";
+                    url = $"{Strings.RPI_API_URL_ADRIAN}/door-lock/set/0";
                     _context.DoorLocks.ElementAt(0).IsOn = 0;
                 }
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (response.IsSuccessStatusCode)
                 {
                     _context.SaveChanges();
-                    return Ok("Success!");
+                    return Ok(_context.DoorLocks.ElementAt(0));
                 } else
                 {
-                    return Ok("Something went wrong...");
+                    throw new Exception("Couldn't set door lock state.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok("Something went wrong...");
+                return StatusCode(500, ex.Message);
             }
         }
     }

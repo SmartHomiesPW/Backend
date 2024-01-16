@@ -19,28 +19,44 @@ namespace SmartHomeBackend.Controllers.Auth
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto model)
         {
-            var user = await _authService.CreateNewUser(model);
-
-            if (user != null)
+            try
             {
-                return Ok(user);
-            }
+                var user = await _authService.CreateNewUser(model);
 
-            return StatusCode(400, $"An error occurred: User with given mail already exists");
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return StatusCode(400, $"An error occurred: User with given mail already exists");
+                }
+            } catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [Route("login")]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginDto model)
         {
-            var user = await _authService.FindUserFromLogin(model);
-
-            if (user != null)
+            try
             {
-                return Ok(user);
-            }
+                var user = await _authService.FindUserFromLogin(model);
 
-            return StatusCode(400, $"An error occurred: No user found");
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return StatusCode(400, $"An error occurred: User credentials are invalid.");
+                }
+            } catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SmartHomeBackend.Services
 
         private async void RefreshLightsData()
         {
-            string url = $"{Strings.RPI_API_URL}/lights/states";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/lights/states";
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
@@ -65,7 +65,7 @@ namespace SmartHomeBackend.Services
 
         private async void RefreshTemperatureSensorsData()
         {
-            string url = $"{Strings.RPI_API_URL}/sensors/temperature";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/temperature";
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
@@ -90,7 +90,7 @@ namespace SmartHomeBackend.Services
 
         private async void RefreshSunlightSensorsData()
         {
-            string url = $"{Strings.RPI_API_URL}/sensors/light";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/light";
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
@@ -115,7 +115,7 @@ namespace SmartHomeBackend.Services
 
         private async void RefreshHumiditySensorsData()
         {
-            string url = $"{Strings.RPI_API_URL}/sensors/humidity";
+            string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/humidity";
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _deviceService = scope.ServiceProvider.GetRequiredService<DeviceService>();
