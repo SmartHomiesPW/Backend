@@ -19,7 +19,7 @@ namespace SmartHomeBackendAcceptanceTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class LogInFeature : object, Xunit.IClassFixture<LogInFeature.FixtureData>, System.IDisposable
+    public partial class SwitchLightsFeature : object, Xunit.IClassFixture<SwitchLightsFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace SmartHomeBackendAcceptanceTests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "LogIn.feature"
+#line 1 "SwitchLights.feature"
 #line hidden
         
-        public LogInFeature(LogInFeature.FixtureData fixtureData, SmartHomeBackendAcceptanceTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public SwitchLightsFeature(SwitchLightsFeature.FixtureData fixtureData, SmartHomeBackendAcceptanceTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,11 +40,7 @@ namespace SmartHomeBackendAcceptanceTests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "LogIn", @"![Calculator](https://specflow.org/wp-content/uploads/2020/09/calculator.png)
-Simple calculator for adding **two** numbers
-
-Link to a feature: [Calculator](SmartHomeBackendAcceptanceTests/Features/Calculator.feature)
-***Further read***: **[Learn more about how to generate Living Documentation](https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/Generating-Documentation.html)**", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SwitchLights", "A short summary of the feature", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -84,17 +80,17 @@ Link to a feature: [Calculator](SmartHomeBackendAcceptanceTests/Features/Calcula
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Log in to system")]
-        [Xunit.TraitAttribute("FeatureTitle", "LogIn")]
-        [Xunit.TraitAttribute("Description", "Log in to system")]
-        [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void LogInToSystem()
+        [Xunit.SkippableFactAttribute(DisplayName="Switch lights")]
+        [Xunit.TraitAttribute("FeatureTitle", "SwitchLights")]
+        [Xunit.TraitAttribute("Description", "Switch lights")]
+        [Xunit.TraitAttribute("Category", "switchLights")]
+        public virtual void SwitchLights()
         {
             string[] tagsOfScenario = new string[] {
-                    "mytag"};
+                    "switchLights"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Log in to system", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 9
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Switch lights", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -114,17 +110,11 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Email",
-                            "Password"});
-                table1.AddRow(new string[] {
-                            "adrian@test.com",
-                            "123"});
-#line 10
- testRunner.When("I put the following credentials to log in", ((string)(null)), table1, "When ");
+#line 7
+ testRunner.Given("Certain lights in certain rooms of my house", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 13
- testRunner.Then("I log in to system successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 8
+ testRunner.Then("Switching the lights by clicking on them", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -137,12 +127,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                LogInFeature.FeatureSetup();
+                SwitchLightsFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                LogInFeature.FeatureTearDown();
+                SwitchLightsFeature.FeatureTearDown();
             }
         }
     }

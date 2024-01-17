@@ -29,11 +29,11 @@ namespace SmartHomeBackendAcceptanceTests.StepDefinitions
             _restClient = new RestClient(_restClientOptions);
         }
 
-        [When(@"I put the following credentials")]
-        public void WhenIPutTheFollowingCredentials(Table table)
+        [When(@"I put the following credentials to log in")]
+        public void WhenIPutTheFollowingCredentialsToLogIn(Table table)
         {
             userCredentials = table.CreateSet<UserLoginDto>();
-            userCredentials.ElementAt(0).Should().BeEquivalentTo(new UserLoginDto() { Email = "elo@com.com", Password="123" });
+            userCredentials.ElementAt(0).Should().BeEquivalentTo(new UserLoginDto() { Email = "adrian@test.com", Password="123" });
         }
 
         [Then(@"I log in to system successfully")]

@@ -7,7 +7,7 @@ Link to a feature: [Calculator](SmartHomeBackendAcceptanceTests/Features/Calcula
 
 @mytag
 Scenario: Log in to system
-	When I put the following credentials
-		| Email       | Password |
-		| elo@com.com | 123      |
+	When I put the following credentials to log in
+		| Email			  | Password |
+		| adrian@test.com | 123      |
 	Then I log in to system successfully
