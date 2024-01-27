@@ -47,7 +47,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     {
                         var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString()) ??
                             throw new Exception($"Light with id {light.lightId} not found in database.");
-                        lightInDB.Value = light.isOn;
+                        lightInDB.Value = light.isOn ? 1 : 0;
                     }
                     _context.SaveChanges();
                     
@@ -85,7 +85,7 @@ namespace SmartHomeBackend.Controllers.Devices
                         throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDto[].");
                     var lightInDB = _context.SwitchableLights.Find(lightId.ToString()) ??
                         throw new Exception($"Light with id {lightId} not found in database.");
-                    lightInDB.Value = light.isOn;
+                    lightInDB.Value = light.isOn ? 1 : 0;
 
                     _context.SaveChanges();
                     
@@ -110,7 +110,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try {
                 foreach (var lightState in lightsStates)
                 {
-                    string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{lightState.isOn}";
+                    string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{(lightState.isOn ? 1 : 0)}";
                     
                     if (_context.SwitchableLights.Find(lightState.lightId.ToString()) == null)
                         throw new Exception($"Light with id {lightState.lightId} not found in database.");
@@ -123,7 +123,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     {
                         var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString()) ??
                             throw new Exception($"Light with id {lightState.lightId} not found in database.");
-                        lightInDB.Value = lightState.isOn;
+                        lightInDB.Value = lightState.isOn ? 1 : 0;
                     }
                 }
             
