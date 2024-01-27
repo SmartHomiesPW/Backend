@@ -60,6 +60,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
+                if (_context.HumiditySensors.Find(sensorId.ToString()) == null)
+                    throw new Exception($"Humidity Sensor with id {sensorId} not found in database.");
+
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -126,6 +129,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
+                if (_context.SunlightSensors.Find(sensorId.ToString()) == null)
+                    throw new Exception($"Sunlight Sensor with id {sensorId} not found in database.");
+
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -190,6 +196,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
+                if (_context.TemperatureSensors.Find(sensorId.ToString()) == null)
+                    throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
+
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 

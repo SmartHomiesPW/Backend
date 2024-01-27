@@ -62,6 +62,9 @@ namespace SmartHomeBackend.Controllers.Devices
             string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/states";
             try
             {
+                if (_context.SwitchableLights.Find(lightId.ToString()) == null)
+                    throw new Exception($"Light with id {lightId} not found in database.");
+
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -95,6 +98,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 foreach (var lightState in lightsStates)
                 {
                     string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{lightState.isOn}";
+                    
+                    if (_context.SwitchableLights.Find(lightState.lightId.ToString()) == null)
+                        throw new Exception($"Light with id {lightState.lightId} not found in database.");
+
                     var (response, _) = await _deviceService.SendHttpGetRequest(url);
                     if (!response.IsSuccessStatusCode)
                     {

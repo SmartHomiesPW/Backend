@@ -31,6 +31,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
+                if (_context.Alarms.Find(alarmState.Alarm_Id) == null)
+                    throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
+
                 string alarmId = alarmState.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
                 alarmInDB.IsActive = alarmState.IsActive;
@@ -56,6 +59,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
+                if (_context.Alarms.Find(alarmState.Alarm_Id) == null)
+                    throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
+
                 string alarmId = alarmState.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
                 alarmInDB.IsActive = alarmState.IsActive;
@@ -79,7 +85,11 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
         {
-            try { 
+            try {
+
+                if (_context.Alarms.Find(alarmProperties.Alarm_Id) == null)
+                    throw new Exception($"Alarm with id {alarmProperties.Alarm_Id} not found in database.");
+
                 string alarmId = alarmProperties.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
                 alarmInDB.Name = alarmProperties.Name;
@@ -101,10 +111,11 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAlarmFullInfo(string alarmId)
         {
-            // Call do rpi pozyskujący aktualne dane o alarmie
-            // Modyfikacja danych alarmu w bazie danych
             try
             {
+                if (_context.Alarms.Find(alarmId) == null)
+                    throw new Exception($"Alarm with id {alarmId} not found in database.");
+
                 var alarmInDB = _context.Alarms.Find(alarmId);
                 return Ok(alarmInDB);
             }
@@ -122,6 +133,9 @@ namespace SmartHomeBackend.Controllers.Devices
             string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/get";
             try
             {
+                if (_context.Alarms.Find(alarmId) == null)
+                    throw new Exception($"Alarm with id {alarmId} not found in database.");
+
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -156,6 +170,11 @@ namespace SmartHomeBackend.Controllers.Devices
 
             try
             {
+                if (_context.Alarms.Find(alarmId) == null)
+                    throw new Exception($"Alarm with id {alarmId} not found in database.");
+                if (_context.AlarmSensors.Find(alarmSensor.alarmSensorId) == null)
+                    throw new Exception($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
+
                 var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
                                         x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
                 if (alarmSensorInDB != null)
@@ -187,7 +206,12 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpPut]
         public async Task<IActionResult> SetAlarmSensorStateRPi([FromBody] AlarmSensorStateDtoBoardTrigger alarmSensor)
         {
-            try { 
+            try {
+                if (_context.Alarms.Find(alarmSensor.alarmId) == null)
+                    throw new Exception($"Alarm with id {alarmSensor.alarmId} not found in database.");
+                if (_context.AlarmSensors.Find(alarmSensor.alarmSensorId) == null)
+                    throw new Exception($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
+
                 var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmSensor.alarmId) &&
                                             x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
                 if (alarmSensorInDB != null)
@@ -197,20 +221,6 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
 
                 return Ok(alarmSensorInDB);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [Route("{alarmId}/log")]
-        [HttpGet]
-        public async Task<IActionResult> GetAlarmLog(string alarmId)
-        {
-            try { 
-                var alarmsLogsInDB = _context.AlarmTriggers.Where(at => at.Alarm_Id.Equals(alarmId));
-                return Ok(alarmsLogsInDB);
             }
             catch (Exception ex)
             {

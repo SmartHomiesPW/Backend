@@ -27,9 +27,9 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetAllDoorLocksStates()
         {
-            string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states";
             try
             {
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -60,9 +60,13 @@ namespace SmartHomeBackend.Controllers.Devices
         [HttpGet]
         public async Task<IActionResult> GetOneDoorLockState(int doorLockId)
         {
-            string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states/{doorLockId}";
             try
             {
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states/{doorLockId}";
+                
+                if (_context.DoorLocks.Find(doorLockId.ToString()) == null)
+                    throw new Exception($"Door Lock with id {doorLockId} not found in database.");
+
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
                 if (response.IsSuccessStatusCode)
@@ -94,6 +98,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{isOn}";
+                
                 foreach(var doorLock in _context.DoorLocks)
                 {
                     doorLock.IsOn = isOn;
@@ -119,6 +124,9 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}"; ;
+
+                if (_context.DoorLocks.Find(doorLockId.ToString()) == null)
+                    throw new Exception($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (response.IsSuccessStatusCode)

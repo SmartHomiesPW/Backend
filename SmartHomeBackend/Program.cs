@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmartHomeDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("TestConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();

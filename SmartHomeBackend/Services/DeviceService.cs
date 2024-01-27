@@ -9,20 +9,6 @@ namespace SmartHomeBackend.Services
 {
     public class DeviceService
     {
-        public bool DeviceExistsInSystem(string boardId, string lightId, string deviceType, SmartHomeDbContext context)
-        {
-            switch (deviceType)
-            {
-                case "light":
-                    return context.SwitchableLights.Any(s => s.System_Id == boardId && s.Switchable_Light_Id == lightId);
-                default:
-                    break;
-            }
-
-            return false;
-        }
-
-
         public List<SwitchableLight> GetAllSwitchableLights(string boardId, SmartHomeDbContext context)
         {
             return context.SwitchableLights.Where(sl => sl.System_Id == boardId).ToList();
