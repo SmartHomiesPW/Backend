@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SmartHomeBackend.Database;
@@ -11,9 +12,11 @@ using SmartHomeBackend.Database;
 namespace SmartHomeBackend.Migrations
 {
     [DbContext(typeof(SmartHomeDbContext))]
-    partial class SmartHomeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240127013422_UsersSystems")]
+    partial class UsersSystems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,21 +330,6 @@ namespace SmartHomeBackend.Migrations
                     b.HasKey("User_Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("SmartHomeBackend.Models.UserSystem", b =>
-                {
-                    b.Property<Guid>("User_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("System_Id")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("User_Id");
-
-                    b.ToTable("UsersSystems");
                 });
 #pragma warning restore 612, 618
         }

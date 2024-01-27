@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartHomeBackend.Database;
 using SmartHomeBackend.Models.Dto;
 using SmartHomeBackend.Services;
 
@@ -9,9 +10,11 @@ namespace SmartHomeBackend.Controllers.Auth
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly SmartHomeDbContext _context;
 
-        public AuthController(AuthService authService)
+        public AuthController(SmartHomeDbContext context, AuthService authService)
         {
+            _context = context;
             _authService = authService;
         }
 
@@ -25,6 +28,8 @@ namespace SmartHomeBackend.Controllers.Auth
 
                 if (user != null)
                 {
+                    _context.UserSystems.Add(new Models.UserSystem() { User_Id = user.User_Id, System_Id = "1"});
+                    _context.SaveChanges();
                     return Ok(user);
                 }
                 else
