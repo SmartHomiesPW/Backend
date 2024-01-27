@@ -16,7 +16,7 @@ namespace SmartHomeBackend.Controllers.Users
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public ObjectResult GetAllUsers()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace SmartHomeBackend.Controllers.Users
 
         [Route("{userId}")]
         [HttpGet]
-        public async Task<IActionResult> GetUserWithId(string userId)
+        public ObjectResult GetUserWithId(string userId)
         {
             try
             {

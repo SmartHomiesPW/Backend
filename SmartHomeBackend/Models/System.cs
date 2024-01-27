@@ -7,7 +7,7 @@ namespace SmartHomeBackend.Models
     public class System
     {
         [Key]
-        public string System_Id { get; set; }
-        public string Name { get; set; }
+        public string System_Id { get; set; } = "Unknown";
+        public string Name { get; set; } = "Unknown";
     }
 }

@@ -10,12 +10,15 @@ using System.Text;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with switchable lights.
+    /// </summary>
     [Route("api/system/{systemId}/board/{boardId}/devices/lights")]
     [ApiController]
     public class LightsController : ControllerBase
     {
-        private readonly SmartHomeDbContext _context;
         private readonly DeviceService _deviceService;
+        private readonly SmartHomeDbContext _context;
 
         public LightsController(SmartHomeDbContext context, DeviceService deviceService)
         {
@@ -23,6 +26,8 @@ namespace SmartHomeBackend.Controllers.Devices
             _deviceService = deviceService;
         }
 
+
+        /// <returns>Information about current states of all lights connected to specific board within specific system</returns>
         [Route("states")]
         [HttpGet]
         public async Task<IActionResult> GetAllLightsStates()
@@ -36,9 +41,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into SwitchableLightDto[].");
                     foreach (var light in array)
                     {
                         var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString());
+                        if (lightInDB == null)
+                            throw new Exception($"Light with id {light.lightId} not found in database.");
                         lightInDB.Value = light.isOn;
                     }
                     _context.SaveChanges();
@@ -55,6 +64,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about a current state of a specific light connected to specific board within specific system</returns>
         [Route("states/{lightId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneLightState(int lightId)
@@ -71,8 +81,14 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize to SwitchableLightDto[].");
                     var light = array.Where(l => l.lightId == lightId).FirstOrDefault();
+                    if (light == null)
+                        throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDto[].");
                     var lightInDB = _context.SwitchableLights.Find(lightId.ToString());
+                    if (lightInDB == null)
+                        throw new Exception($"Light with id {lightId} not found in database.");
                     lightInDB.Value = light.isOn;
 
                     _context.SaveChanges();
@@ -109,6 +125,8 @@ namespace SmartHomeBackend.Controllers.Devices
                     } else
                     {
                         var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString());
+                        if (lightInDB == null)
+                            throw new Exception($"Light with id {lightState.lightId} not found in database.");
                         lightInDB.Value = lightState.isOn;
                     }
                 }

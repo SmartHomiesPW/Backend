@@ -5,6 +5,9 @@ using SmartHomeBackend.Services;
 
 namespace SmartHomeBackend.Controllers.Auth
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with authorization.
+    /// </summary>
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -20,11 +23,11 @@ namespace SmartHomeBackend.Controllers.Auth
 
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto model)
+        public ObjectResult RegisterUser([FromBody] UserRegistrationDto model)
         {
             try
             {
-                var user = await _authService.CreateNewUser(model);
+                var user = _authService.CreateNewUser(model);
 
                 if (user != null)
                 {
@@ -44,11 +47,11 @@ namespace SmartHomeBackend.Controllers.Auth
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto model)
+        public ObjectResult Login([FromBody] UserLoginDto model)
         {
             try
             {
-                var user = await _authService.FindUserFromLogin(model);
+                var user = _authService.FindUserFromLogin(model);
 
                 if (user != null)
                 {

@@ -8,6 +8,9 @@ using System.Text.Json;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with sensors.
+    /// </summary>
     [Route("api/system/{systemId}/board/{boardId}/devices/sensors")]
     [ApiController]
     public class SensorsController : Controller
@@ -34,9 +37,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString());
+                        if (sensorInDB == null)
+                            throw new Exception($"Humidity Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.humidity;
                     }
                     _context.SaveChanges();
@@ -60,7 +67,8 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                if (_context.HumiditySensors.Find(sensorId.ToString()) == null)
+                var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString());
+                if (sensorInDB == null)
                     throw new Exception($"Humidity Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
@@ -70,8 +78,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
                     var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString());
+                    if (sensor == null)
+                        throw new Exception("Humidity Sensor id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.humidity;
 
                     _context.SaveChanges();
@@ -103,9 +114,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.SunlightSensors.Find(sensor.sensorId.ToString());
+                        if (sensorInDB == null)
+                            throw new Exception($"Sunlight Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.lightValue;
                     }
                     _context.SaveChanges();
@@ -129,8 +144,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                if (_context.SunlightSensors.Find(sensorId.ToString()) == null)
-                    throw new Exception($"Sunlight Sensor with id {sensorId} not found in database.");
+                var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString());
+                if (sensorInDB == null)
+                    throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -139,8 +155,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
                     var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString());
+                    if (sensor == null)
+                        throw new Exception("Humidity Sensor id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.lightValue;
 
                     _context.SaveChanges();
@@ -172,9 +191,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId.ToString());
+                        if (sensorInDB == null)
+                            throw new Exception($"Temperature Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.temperature;
                     }
                     _context.SaveChanges();
@@ -196,7 +219,8 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                if (_context.TemperatureSensors.Find(sensorId.ToString()) == null)
+                var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString());
+                if (sensorInDB == null)
                     throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
@@ -206,8 +230,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
                     var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString());
+                    if (sensor == null)
+                        throw new Exception("Humidity Sensor id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.temperature;
 
                     _context.SaveChanges();

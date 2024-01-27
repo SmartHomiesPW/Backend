@@ -13,9 +13,9 @@ namespace SmartHomeBackend.Services
             _context = context;
         }
 
-        public async Task<User?> CreateNewUser(UserRegistrationDto model)
+        public User? CreateNewUser(UserRegistrationDto model)
         {
-            bool userWithGivenEmailAlreadyExists = await CheckIfEmailIsAlreadyInUse(model.Email);
+            bool userWithGivenEmailAlreadyExists = CheckIfEmailIsAlreadyInUse(model.Email);
 
             if (userWithGivenEmailAlreadyExists)
             {
@@ -36,7 +36,7 @@ namespace SmartHomeBackend.Services
             return user;
         }
 
-        public async Task<User?> RemoveUser(Guid user_Id)
+        public User? RemoveUser(Guid user_Id)
         {
             var userToDelete = _context.Users.Where(u => u.User_Id.Equals(user_Id)).FirstOrDefault();
 
@@ -49,17 +49,17 @@ namespace SmartHomeBackend.Services
             return userToDelete;
         }
 
-        public async Task<bool> VerifyUser(UserLoginDto model)
+        public bool VerifyUser(UserLoginDto model)
         {
             return _context.Users.Any(u => u.Email.Equals(model.Email) && u.Password.Equals(model.Password));
         }
 
-        public async Task<bool> CheckIfEmailIsAlreadyInUse(string email)
+        public bool CheckIfEmailIsAlreadyInUse(string email)
         {
             return _context.Users.Any(u => u.Email.Equals(email));
         }
 
-        public async Task<User?> FindUserFromLogin(UserLoginDto model)
+        public User? FindUserFromLogin(UserLoginDto model)
         {
             return _context.Users.Where(u => u.Email.Equals(model.Email) && u.Password.Equals(model.Password)).FirstOrDefault();
         }

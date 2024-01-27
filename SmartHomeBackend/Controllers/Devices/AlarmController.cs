@@ -8,6 +8,9 @@ using SmartHomeBackend.Models.Dto;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with alarm.
+    /// </summary>
     [Route("api/system/{systemId}/board/{boardId}/devices/alarm")]
     [ApiController]
     public class AlarmController : ControllerBase
@@ -27,7 +30,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("stateRPi")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmStateRPi([FromBody] AlarmStateDto alarmState)
+        public ObjectResult SetAlarmStateRPi([FromBody] AlarmStateDto alarmState)
         {
             try
             {
@@ -36,11 +39,12 @@ namespace SmartHomeBackend.Controllers.Devices
 
                 string alarmId = alarmState.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
-                alarmInDB.IsActive = alarmState.IsActive;
-                alarmInDB.IsTriggered = alarmState.IsTriggered;
-
-                _context.SaveChanges();
-
+                if (alarmInDB != null)
+                {
+                    alarmInDB.IsActive = alarmState.IsActive;
+                    alarmInDB.IsTriggered = alarmState.IsTriggered;
+                    _context.SaveChanges();
+                }
                 return Ok(alarmInDB);
 
             } catch (Exception ex)
@@ -55,7 +59,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("state")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
+        public ObjectResult SetAlarmState([FromBody] AlarmStateDto alarmState)
         {
             try
             {
@@ -64,10 +68,12 @@ namespace SmartHomeBackend.Controllers.Devices
 
                 string alarmId = alarmState.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
-                alarmInDB.IsActive = alarmState.IsActive;
-                alarmInDB.IsTriggered = alarmState.IsTriggered;
-
-                _context.SaveChanges();
+                if (alarmInDB != null)
+                {
+                    alarmInDB.IsActive = alarmState.IsActive;
+                    alarmInDB.IsTriggered = alarmState.IsTriggered;
+                    _context.SaveChanges();
+                }
 
                 return Ok(alarmInDB);
             }
@@ -83,7 +89,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("properties")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
+        public ObjectResult SetAlarmProperties([FromBody] AlarmPropertiesDto alarmProperties)
         {
             try {
 
@@ -92,11 +98,13 @@ namespace SmartHomeBackend.Controllers.Devices
 
                 string alarmId = alarmProperties.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
-                alarmInDB.Name = alarmProperties.Name;
-                alarmInDB.Details = alarmProperties.Details;
-                alarmInDB.AccessCode = alarmProperties.AccessCode;
-
-                _context.SaveChanges();
+                if (alarmInDB != null)
+                {
+                    alarmInDB.Name = alarmProperties.Name;
+                    alarmInDB.Details = alarmProperties.Details;
+                    alarmInDB.AccessCode = alarmProperties.AccessCode;
+                    _context.SaveChanges();
+                }
 
                 return Ok(alarmInDB);
             }
@@ -109,7 +117,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database on success.</returns>
         [Route("{alarmId}")]
         [HttpGet]
-        public async Task<IActionResult> GetAlarmFullInfo(string alarmId)
+        public ObjectResult GetAlarmFullInfo(string alarmId)
         {
             try
             {
@@ -128,7 +136,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Full information about all alarm's sensors on success.</returns>
         [Route("{alarmId}/sensors")]
         [HttpGet]
-        public async Task<IActionResult> GetAlarmSensorsStates(string alarmId)
+        public async Task<ObjectResult> GetAlarmSensorsStates(string alarmId)
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/get";
             try
@@ -142,10 +150,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<AlarmSensorStateDtoBoardGet[]>(text);
+                    if (array == null)
+                        throw new Exception("Couldn't deserialize response into AlarmSensorStateDtoBoardGet[].");
                     foreach (var alarmSensor in array)
                     {
                         var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
-                        alarmSensorInDB.Is_On = alarmSensor.isOn;
+                        if(alarmSensorInDB != null)
+                            alarmSensorInDB.Is_On = alarmSensor.isOn;
                     }
                     _context.SaveChanges();
                 }
@@ -164,7 +175,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
         [Route("{alarmId}/sensors")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
+        public async Task<ObjectResult> SetAlarmSensorState(string alarmId, [FromBody] AlarmSensorStateDto alarmSensor)
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/set/{alarmSensor.alarmSensorId}/{alarmSensor.isOn}";
 
@@ -204,7 +215,7 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
         [Route("sensorsRPi")]
         [HttpPut]
-        public async Task<IActionResult> SetAlarmSensorStateRPi([FromBody] AlarmSensorStateDtoBoardTrigger alarmSensor)
+        public ObjectResult SetAlarmSensorStateRPi([FromBody] AlarmSensorStateDtoBoardTrigger alarmSensor)
         {
             try {
                 if (_context.Alarms.Find(alarmSensor.alarmId) == null)

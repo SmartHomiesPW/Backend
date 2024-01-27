@@ -10,7 +10,7 @@ namespace SmartHomeBackend.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> TestFunction()
+        public ObjectResult TestFunction()
         {
             return Ok("test");
         }

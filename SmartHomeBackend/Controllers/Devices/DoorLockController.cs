@@ -36,10 +36,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<DoorLockStateDto[]>(text);
-                    foreach (var doorLock in array)
+                    foreach (var doorLock in array ?? [])
                     {
                         var doorLockInDB = _context.DoorLocks.Find(doorLock.doorLock_Id.ToString());
-                        doorLockInDB.IsOn = doorLock.isOn;
+                        if(doorLockInDB != null)
+                            doorLockInDB.IsOn = doorLock.isOn;
                     }
                     _context.SaveChanges();
 
@@ -73,11 +74,16 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     var text = jsonDocument.RootElement.GetRawText();
                     var doorLock = JsonSerializer.Deserialize<DoorLockStateDto>(text);
-
                     var doorLockInDB = _context.DoorLocks.Find(doorLockId.ToString());
-                    doorLockInDB.IsOn = doorLock.isOn;
-                    _context.SaveChanges();
 
+                    if (doorLockInDB != null && doorLock != null)
+                    {
+                        doorLockInDB.IsOn = doorLock.isOn;
+                        _context.SaveChanges();
+                    } else
+                    {
+                        throw new Exception("Couldn't get a door lock state.");
+                    }
                     return Ok(_context.DoorLocks);
                 }
                 else
@@ -124,16 +130,15 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}"; ;
-
-                if (_context.DoorLocks.Find(doorLockId.ToString()) == null)
+                var doorLock = _context.DoorLocks.Find(doorLockId.ToString());
+                if (doorLock == null)
                     throw new Exception($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (response.IsSuccessStatusCode)
                 {
-                    _context.DoorLocks.Find(doorLockId.ToString()).IsOn = isOn;
+                    doorLock.IsOn = isOn;
                     _context.SaveChanges();
-                    
                     return Ok(_context.DoorLocks.Find(doorLockId.ToString()));
                 } else
                 {

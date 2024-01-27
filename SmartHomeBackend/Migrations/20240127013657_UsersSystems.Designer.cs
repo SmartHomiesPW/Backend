@@ -13,7 +13,7 @@ namespace SmartHomeBackend.Migrations
 {
     [DbContext(typeof(SmartHomeDbContext))]
     [Migration("20240127013657_UsersSystems2")]
-    partial class UsersSystems2
+    partial class UsersSystems
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
