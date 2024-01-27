@@ -42,7 +42,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString()) ??
-                            throw new Exception($"Humidity Sensor with id {sensor.sensorId} not found in database.");
+                            throw new BadHttpRequestException($"Humidity Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.humidity;
                     }
                     _context.SaveChanges();
@@ -53,6 +53,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new Exception("Couldn't get all humidity sensors states.");
                 }
 
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -67,7 +71,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString()) ??
-                    throw new Exception($"Humidity Sensor with id {sensorId} not found in database.");
+                    throw new BadHttpRequestException($"Humidity Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -78,7 +82,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
                     var sensor = array.First(l => l.sensorId == sensorId) ??
-                        throw new Exception("Humidity Sensor's id from response is invalid.");
+                        throw new BadHttpRequestException("Humidity Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.humidity;
 
                     _context.SaveChanges();
@@ -90,6 +94,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new Exception("Couldn't get a humidity sensor state.");
                 }
 
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -115,7 +123,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.SunlightSensors.Find(sensor.sensorId.ToString()) ??
-                            throw new Exception($"Sunlight Sensor with id {sensor.sensorId} not found in database.");
+                            throw new BadHttpRequestException($"Sunlight Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.lightValue;
                     }
                     _context.SaveChanges();
@@ -126,6 +134,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't get all sunlight sensors states.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -141,7 +153,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString()) ??
-                    throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
+                    throw new BadHttpRequestException($"Sunlight Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -152,7 +164,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
                     var sensor = array.First(l => l.sensorId == sensorId) ??
-                        throw new Exception("Sunlight Sensor's id from response is invalid.");
+                        throw new BadHttpRequestException("Sunlight Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.lightValue;
 
                     _context.SaveChanges();
@@ -164,6 +176,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new Exception("Couldn't get a sunlight sensor state.");
                 }
 
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -189,7 +205,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     foreach (var sensor in array)
                     {
                         var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId.ToString()) ??
-                            throw new Exception($"Temperature Sensor's with id {sensor.sensorId} not found in database.");
+                            throw new BadHttpRequestException($"Temperature Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.temperature;
                     }
                     _context.SaveChanges();
@@ -198,6 +214,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't get all temperature sensors states.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -213,7 +233,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString()) ??
-                    throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
+                    throw new BadHttpRequestException($"Temperature Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -224,7 +244,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
                     var sensor = array.First(l => l.sensorId == sensorId) ??
-                        throw new Exception("Temperature Sensor id from response is invalid.");
+                        throw new BadHttpRequestException("Temperature Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.temperature;
 
                     _context.SaveChanges();
@@ -236,6 +256,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new Exception("Couldn't get a temperature sensor state.");
                 }
 
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {

@@ -44,7 +44,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     foreach (var doorLock in array)
                     {
                         var doorLockInDB = _context.DoorLocks.Find(doorLock.doorLock_Id.ToString()) ??
-                            throw new Exception($"Door Lock with id {doorLock.doorLock_Id} not found in database.");
+                            throw new BadHttpRequestException($"Door Lock with id {doorLock.doorLock_Id} not found in database.");
                         doorLockInDB.IsOn = doorLock.isOn;
                     }
                     _context.SaveChanges();
@@ -55,6 +55,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't get all door locks states.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -71,7 +75,7 @@ namespace SmartHomeBackend.Controllers.Devices
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states/{doorLockId}";
                 var doorLockInDB = _context.DoorLocks.Find(doorLockId.ToString()) ??
-                    throw new Exception($"Door Lock with id {doorLockId} not found in database.");
+                    throw new BadHttpRequestException($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -90,6 +94,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't get a door lock state.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -134,7 +142,7 @@ namespace SmartHomeBackend.Controllers.Devices
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}";
                 var doorLock = _context.DoorLocks.Find(doorLockId.ToString()) ??
-                    throw new Exception($"Door Lock with id {doorLockId} not found in database.");
+                    throw new BadHttpRequestException($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);
                 if (response.IsSuccessStatusCode)
@@ -146,6 +154,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't set door lock state.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {

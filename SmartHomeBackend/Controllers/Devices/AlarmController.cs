@@ -36,7 +36,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 if (_context.Alarms.Find(alarmState.Alarm_Id) == null)
-                    throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
+                    throw new BadHttpRequestException($"Alarm with id {alarmState.Alarm_Id} not found in database.");
 
                 string alarmId = alarmState.Alarm_Id;
                 var alarmInDB = _context.Alarms.Find(alarmId);
@@ -48,6 +48,9 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
                 return Ok(alarmInDB);
 
+            } catch (BadHttpRequestException ex) 
+            {
+                return StatusCode(400, ex.Message);
             } catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
@@ -65,7 +68,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 var alarmInDB = _context.Alarms.Find(alarmState.Alarm_Id) ??
-                    throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
+                    throw new BadHttpRequestException($"Alarm with id {alarmState.Alarm_Id} not found in database.");
 
                 alarmInDB.IsActive = 1 - alarmState.IsActive;
 
@@ -86,6 +89,10 @@ namespace SmartHomeBackend.Controllers.Devices
 
                 return Ok(alarmInDB);
             }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
@@ -103,7 +110,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try {
 
                 var alarmInDB = _context.Alarms.Find(alarmProperties.Alarm_Id) ??
-                    throw new Exception($"Alarm with id {alarmProperties.Alarm_Id} not found in database.");
+                    throw new BadHttpRequestException($"Alarm with id {alarmProperties.Alarm_Id} not found in database.");
 
                 alarmInDB.Name = alarmProperties.Name;
                 alarmInDB.Details = alarmProperties.Details;
@@ -111,6 +118,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 _context.SaveChanges();
 
                 return Ok(alarmInDB);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -126,9 +137,13 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 var alarmInDB = _context.Alarms.Find(alarmId) ??
-                    throw new Exception($"Alarm with id {alarmId} not found in database.");
+                    throw new BadHttpRequestException($"Alarm with id {alarmId} not found in database.");
 
                 return Ok(alarmInDB);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -145,7 +160,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 if (_context.Alarms.Find(alarmId) == null)
-                    throw new Exception($"Alarm with id {alarmId} not found in database.");
+                    throw new BadHttpRequestException($"Alarm with id {alarmId} not found in database.");
 
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -165,6 +180,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
 
                 return Ok(_context.AlarmSensors);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {

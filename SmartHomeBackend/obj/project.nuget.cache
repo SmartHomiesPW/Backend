@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tChJNloPdYzqG3GMGgEHVJYDWPBnjiF2cg/LtOpYyt+6bO3XiKY7IXNBlNVXjc0yomPe7kBqkBqt31t+qR2SIg==",
+  "dgSpecHash": "mb6hqRHBvSjIS/s3Pw/2ZeqBjualY1XplR4Hx3XMpb8as0CY2bkBcnEX12auOfd+JFSUOO9p2FmIlG4ivQ96Nw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\Desktop\\DO APD\\SmartHomeBackend - main\\Backend\\SmartHomeBackend\\SmartHomeBackend.csproj",
+  "projectFilePath": "C:\\Users\\adria\\Desktop\\Backend\\SmartHomeBackend\\SmartHomeBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adria\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\adria\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

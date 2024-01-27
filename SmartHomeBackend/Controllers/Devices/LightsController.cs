@@ -46,7 +46,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     foreach (var light in array)
                     {
                         var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString()) ??
-                            throw new Exception($"Light with id {light.lightId} not found in database.");
+                            throw new BadHttpRequestException($"Light with id {light.lightId} not found in database.");
                         lightInDB.Value = light.isOn ? 1 : 0;
                     }
                     _context.SaveChanges();
@@ -56,6 +56,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 {
                     throw new Exception("Couldn't get all lights states.");
                 }
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -71,8 +75,8 @@ namespace SmartHomeBackend.Controllers.Devices
             string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/states";
             try
             {
-                if (_context.SwitchableLights.Find(lightId.ToString()) == null)
-                    throw new Exception($"Light with id {lightId} not found in database.");
+                var lightInDB = _context.SwitchableLights.Find(lightId.ToString()) ??
+                    throw new BadHttpRequestException($"Light with id {lightId} not found in database.");
 
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
 
@@ -83,8 +87,7 @@ namespace SmartHomeBackend.Controllers.Devices
                         throw new Exception("Couldn't deserialize to SwitchableLightDtoBoard[].");
                     var light = array.First(l => l.lightId == lightId) ??
                         throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDtoBoard[].");
-                    var lightInDB = _context.SwitchableLights.Find(lightId.ToString()) ??
-                        throw new Exception($"Light with id {lightId} not found in database.");
+
                     lightInDB.Value = light.isOn ? 1 : 0;
 
                     _context.SaveChanges();
@@ -95,6 +98,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new Exception("Couldn't get a light state.");
                 }
 
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -111,18 +118,16 @@ namespace SmartHomeBackend.Controllers.Devices
                 foreach (var lightState in lightsStates)
                 {
                     string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{lightState.isOn}";
-                    
-                    if (_context.SwitchableLights.Find(lightState.lightId.ToString()) == null)
-                        throw new Exception($"Light with id {lightState.lightId} not found in database.");
+
+                    var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString()) ??
+                        throw new BadHttpRequestException($"Light with id {lightState.lightId} not found in database.");
 
                     var (response, _) = await _deviceService.SendHttpGetRequest(url);
                     if (!response.IsSuccessStatusCode)
                     {
-                        return StatusCode(int.Parse(response.StatusCode.ToString()), $"An error occurred: {response.Content}");
+                        throw new Exception(response.Content.ToString());
                     } else
                     {
-                        var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString()) ??
-                            throw new Exception($"Light with id {lightState.lightId} not found in database.");
                         lightInDB.Value = lightState.isOn;
                     }
                 }
@@ -130,6 +135,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 _context.SaveChanges();
             
                 return Ok(_context.SwitchableLights);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
