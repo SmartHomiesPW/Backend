@@ -10,7 +10,6 @@ namespace SmartHomeBackendUnitTests.Services
 {
     public class AuthServiceTests
     {
-        // Be mindful that these tests use the cloud database, although they are working on rollback transactions
 
         [Fact]
         public async void UserShouldBeAddedToDatabase()
@@ -20,7 +19,7 @@ namespace SmartHomeBackendUnitTests.Services
                 .Build();
 
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                .UseNpgsql(config.GetConnectionString("TestConnection"));
 
             using (var context = new SmartHomeDbContext(options.Options))
             {
@@ -28,7 +27,7 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var myService = new AuthService(context);
 
-                var testUserRegistration = new UserRegistrationDto() { Email = "w@pl.pl", Password = "www" };
+                var testUserRegistration = new UserRegistrationDto() { Email = "test@test.pl", Password = "www" };
 
                 var transaction = context.Database.BeginTransaction();
                 var result = await myService.CreateNewUser(testUserRegistration);
@@ -54,7 +53,7 @@ namespace SmartHomeBackendUnitTests.Services
                 .Build();
 
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                .UseNpgsql(config.GetConnectionString("TestConnection"));
 
             using (var context = new SmartHomeDbContext(options.Options))
             {
@@ -63,7 +62,7 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var myService = new AuthService(context);
 
-                var testUser = new UserRegistrationDto() { Email = "w@pl.pl", Password = "www" };
+                var testUser = new UserRegistrationDto() { Email = "test@test.pl", Password = "www" };
 
                 var result = await myService.CreateNewUser(testUser);
                 var deletedUser = await myService.RemoveUser(result?.User_Id ?? Guid.Empty);
@@ -80,7 +79,7 @@ namespace SmartHomeBackendUnitTests.Services
                 .Build();
 
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                .UseNpgsql(config.GetConnectionString("TestConnection"));
 
             using (var context = new SmartHomeDbContext(options.Options))
             {
@@ -88,7 +87,7 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var myService = new AuthService(context);
 
-                var testUser = new UserRegistrationDto() { Email = "w@pl.pl", FirstName = "Peter", Password = "www" };
+                var testUser = new UserRegistrationDto() { Email = "test@test.pl", FirstName = "Peter", Password = "www" };
 
                 var transaction = context.Database.BeginTransaction();
                 var result = await myService.CreateNewUser(testUser);
@@ -113,7 +112,7 @@ namespace SmartHomeBackendUnitTests.Services
                 .Build();
 
             var options = new DbContextOptionsBuilder<SmartHomeDbContext>()
-                .UseNpgsql(config.GetConnectionString("DefaultConnection"));
+                .UseNpgsql(config.GetConnectionString("TestConnection"));
 
             using (var context = new SmartHomeDbContext(options.Options))
             {
@@ -121,8 +120,8 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var myService = new AuthService(context);
 
-                var testUser1 = new UserRegistrationDto() { Email = "w@pl.pl", FirstName = "Peter", Password = "www" };
-                var testUser2 = new UserRegistrationDto() { Email = "w@pl.pl", FirstName = "John", Password = "nnn" };
+                var testUser1 = new UserRegistrationDto() { Email = "test@test.pl", FirstName = "Peter", Password = "www" };
+                var testUser2 = new UserRegistrationDto() { Email = "test@test.pl", FirstName = "John", Password = "nnn" };
 
                 var transaction = context.Database.BeginTransaction();
 

@@ -12,13 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmartHomeDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TestConnection"));
 });
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<SystemService>();
 builder.Services.AddScoped<DeviceService>();
-// builder.Services.AddHostedService<DatabaseRefreshService>();
+builder.Services.AddHostedService<DatabaseRefreshService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -41,8 +41,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

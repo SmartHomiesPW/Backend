@@ -67,7 +67,6 @@ namespace SmartHomeBackendUnitTests.Services
         [Fact]
         public void TheFoundUserShouldHaveCorrectCredentials()
         {
-            // Arrange
             var testUser = new User() { User_Id = Guid.NewGuid(), Email = "w@test.pl", Password = "www" };
 
             var itemsData = new List<User>
