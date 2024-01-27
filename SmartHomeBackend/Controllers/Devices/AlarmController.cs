@@ -206,7 +206,7 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (_context.Alarms.Find(alarmId) == null)
                     throw new Exception($"Alarm with id {alarmId} not found in database.");
                 if (_context.AlarmSensors.Find(alarmSensor.alarmSensorId) == null)
-                    throw new Exception($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
+                    throw new BadHttpRequestException($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
 
                 var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
                                         x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
@@ -224,6 +224,10 @@ namespace SmartHomeBackend.Controllers.Devices
                     }
                 }
                 return Ok(_context.AlarmSensors);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
@@ -243,7 +247,7 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (_context.Alarms.Find(alarmSensor.alarmId) == null)
                     throw new Exception($"Alarm with id {alarmSensor.alarmId} not found in database.");
                 if (_context.AlarmSensors.Find(alarmSensor.alarmSensorId) == null)
-                    throw new Exception($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
+                    throw new BadHttpRequestException($"Alarm Sensor with id {alarmSensor.alarmSensorId} not found in database.");
 
                 var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmSensor.alarmId) &&
                                             x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
@@ -254,6 +258,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 }
 
                 return Ok(alarmSensorInDB);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return StatusCode(400, ex.Message);
             }
             catch (Exception ex)
             {
