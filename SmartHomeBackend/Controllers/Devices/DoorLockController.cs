@@ -130,8 +130,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}"; ;
-                var doorLock = _context.DoorLocks.Find(doorLockId.ToString());
-                if (doorLock == null)
+                var doorLock = _context.DoorLocks.Find(doorLockId.ToString()) ??
                     throw new Exception($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, _) = await _deviceService.SendHttpGetRequest(url);

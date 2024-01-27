@@ -36,13 +36,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
-                        var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString());
-                        if (sensorInDB == null)
+                        var sensorInDB = _context.HumiditySensors.Find(sensor.sensorId.ToString()) ??
                             throw new Exception($"Humidity Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.humidity;
                     }
@@ -67,8 +65,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString());
-                if (sensorInDB == null)
+                var sensorInDB = _context.HumiditySensors.Find(sensorId.ToString()) ??
                     throw new Exception($"Humidity Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/humidity";
@@ -77,12 +74,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    if (sensor == null)
-                        throw new Exception("Humidity Sensor id from response is invalid.");
+                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                        throw new Exception("Humidity Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.humidity;
 
                     _context.SaveChanges();
@@ -113,13 +108,11 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
-                        var sensorInDB = _context.SunlightSensors.Find(sensor.sensorId.ToString());
-                        if (sensorInDB == null)
+                        var sensorInDB = _context.SunlightSensors.Find(sensor.sensorId.ToString()) ??
                             throw new Exception($"Sunlight Sensor with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.lightValue;
                     }
@@ -144,8 +137,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString());
-                if (sensorInDB == null)
+                var sensorInDB = _context.SunlightSensors.Find(sensorId.ToString()) ??
                     throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/light";
@@ -154,12 +146,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    if (sensor == null)
-                        throw new Exception("Humidity Sensor id from response is invalid.");
+                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                        throw new Exception("Sunlight Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.lightValue;
 
                     _context.SaveChanges();
@@ -190,14 +180,12 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
                     foreach (var sensor in array)
                     {
-                        var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId.ToString());
-                        if (sensorInDB == null)
-                            throw new Exception($"Temperature Sensor with id {sensor.sensorId} not found in database.");
+                        var sensorInDB = _context.TemperatureSensors.Find(sensor.sensorId.ToString()) ??
+                            throw new Exception($"Temperature Sensor's with id {sensor.sensorId} not found in database.");
                         sensorInDB.Value = (decimal)sensor.temperature;
                     }
                     _context.SaveChanges();
@@ -219,8 +207,7 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString());
-                if (sensorInDB == null)
+                var sensorInDB = _context.TemperatureSensors.Find(sensorId.ToString()) ??
                     throw new Exception($"Temperature Sensor with id {sensorId} not found in database.");
 
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/sensors/temperature";
@@ -229,12 +216,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault();
-                    if (sensor == null)
-                        throw new Exception("Humidity Sensor id from response is invalid.");
+                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                        throw new Exception("Temperature Sensor id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.temperature;
 
                     _context.SaveChanges();

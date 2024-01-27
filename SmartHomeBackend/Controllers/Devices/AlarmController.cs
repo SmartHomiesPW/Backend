@@ -93,18 +93,13 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try {
 
-                if (_context.Alarms.Find(alarmProperties.Alarm_Id) == null)
+                var alarmInDB = _context.Alarms.Find(alarmProperties.Alarm_Id) ??
                     throw new Exception($"Alarm with id {alarmProperties.Alarm_Id} not found in database.");
 
-                string alarmId = alarmProperties.Alarm_Id;
-                var alarmInDB = _context.Alarms.Find(alarmId);
-                if (alarmInDB != null)
-                {
-                    alarmInDB.Name = alarmProperties.Name;
-                    alarmInDB.Details = alarmProperties.Details;
-                    alarmInDB.AccessCode = alarmProperties.AccessCode;
-                    _context.SaveChanges();
-                }
+                alarmInDB.Name = alarmProperties.Name;
+                alarmInDB.Details = alarmProperties.Details;
+                alarmInDB.AccessCode = alarmProperties.AccessCode;
+                _context.SaveChanges();
 
                 return Ok(alarmInDB);
             }
@@ -121,10 +116,9 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                if (_context.Alarms.Find(alarmId) == null)
+                var alarmInDB = _context.Alarms.Find(alarmId) ??
                     throw new Exception($"Alarm with id {alarmId} not found in database.");
 
-                var alarmInDB = _context.Alarms.Find(alarmId);
                 return Ok(alarmInDB);
             }
             catch (Exception ex)
@@ -149,8 +143,7 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<AlarmSensorStateDtoBoardGet[]>(text);
-                    if (array == null)
+                    var array = JsonSerializer.Deserialize<AlarmSensorStateDtoBoardGet[]>(text) ?? 
                         throw new Exception("Couldn't deserialize response into AlarmSensorStateDtoBoardGet[].");
                     foreach (var alarmSensor in array)
                     {
