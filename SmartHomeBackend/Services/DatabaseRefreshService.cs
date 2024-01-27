@@ -7,6 +7,9 @@ using System.Text.Json;
 
 namespace SmartHomeBackend.Services
 {
+    /// <summary>
+    /// Service responsible for operations associated with database refreshment.
+    /// </summary>
     public class DatabaseRefreshService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
@@ -16,22 +19,25 @@ namespace SmartHomeBackend.Services
             _scopeFactory = scopeFactory;
         }
 
+        /// <summary>Makes a loop for database refreshment.</summary>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
-                RefreshDatabase();
+                await RefreshDatabase();
             }
         }
 
-        private void RefreshDatabase()
+        /// <summary>Invokes methods responsible for database refreshment.</summary>
+        private async Task RefreshDatabase()
         {
-            RefreshLightsData();
-            RefreshSensorsData();
+            await RefreshLightsData();
+            await RefreshSensorsData();
         }
 
-        private async void RefreshLightsData()
+        /// <summary>Refreshes switchable lights data in the database.</summary>
+        private async Task RefreshLightsData()
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/lights/states";
             using (var scope = _scopeFactory.CreateScope())
@@ -42,7 +48,8 @@ namespace SmartHomeBackend.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var lightsData = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument);
+                    var lightsData = JsonSerializer.Deserialize<SwitchableLightDto[]>(jsonDocument) ??
+                        throw new Exception("Couldn't deserialize response into SwitchableLightDto[].");
                     foreach (var lightData in lightsData)
                     {
                         var light = _context.Set<SwitchableLight>().Find(lightData.lightId.ToString());
@@ -56,14 +63,16 @@ namespace SmartHomeBackend.Services
             }
         }
 
-        private void RefreshSensorsData()
+        /// <summary>Invokes methods responsible for refreshment of sensors data in the database.</summary>
+        private async Task RefreshSensorsData()
         {
-            RefreshTemperatureSensorsData();
-            RefreshSunlightSensorsData();
-            RefreshHumiditySensorsData();
+            await RefreshTemperatureSensorsData();
+            await RefreshSunlightSensorsData();
+            await RefreshHumiditySensorsData();
         }
 
-        private async void RefreshTemperatureSensorsData()
+        /// <summary>Refreshes temperature sensors data in the database.</summary>
+        private async Task RefreshTemperatureSensorsData()
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/temperature";
             using (var scope = _scopeFactory.CreateScope())
@@ -74,7 +83,8 @@ namespace SmartHomeBackend.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var temperaturesData = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(jsonDocument);
+                    var temperaturesData = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(jsonDocument) ??
+                        throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
                     foreach (var temperatureData in temperaturesData)
                     {
                         var sensor = _context.Set<TemperatureSensor>().Find(temperatureData.sensorId.ToString());
@@ -88,7 +98,8 @@ namespace SmartHomeBackend.Services
             }
         }
 
-        private async void RefreshSunlightSensorsData()
+        /// <summary>Refreshes sunlight sensors data in the database.</summary>
+        private async Task RefreshSunlightSensorsData()
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/light";
             using (var scope = _scopeFactory.CreateScope())
@@ -99,7 +110,8 @@ namespace SmartHomeBackend.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var sunlightsData = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(jsonDocument);
+                    var sunlightsData = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(jsonDocument) ??
+                        throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
                     foreach (var sunlightData in sunlightsData)
                     {
                         var sensor = _context.Set<TemperatureSensor>().Find(sunlightData.sensorId.ToString());
@@ -113,7 +125,8 @@ namespace SmartHomeBackend.Services
             }
         }
 
-        private async void RefreshHumiditySensorsData()
+        /// <summary>Refreshes temperature humidity data in the database.</summary>
+        private async Task RefreshHumiditySensorsData()
         {
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/humidity";
             using (var scope = _scopeFactory.CreateScope())
@@ -124,7 +137,8 @@ namespace SmartHomeBackend.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var humiditiesData = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(jsonDocument);
+                    var humiditiesData = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(jsonDocument) ??
+                        throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
                     foreach (var humidityData in humiditiesData)
                     {
                         var sensor = _context.Set<TemperatureSensor>().Find(humidityData.sensorId.ToString());

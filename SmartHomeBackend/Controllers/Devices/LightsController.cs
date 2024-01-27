@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using SmartHomeBackend.Models.Dto;
 using System.Text;
+using System.Collections.Generic;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
@@ -27,7 +28,7 @@ namespace SmartHomeBackend.Controllers.Devices
         }
 
 
-        /// <returns>Information about current states of all lights connected to specific board within specific system</returns>
+        /// <returns>Information about current states of all lights connected to specific board within specific system on success.</returns>
         [Route("states")]
         [HttpGet]
         public async Task<IActionResult> GetAllLightsStates()
@@ -62,7 +63,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
-        /// <returns>Information about a current state of a specific light connected to specific board within specific system</returns>
+        /// <returns>Information about a current state of a specific light connected to specific board within specific system on success.</returns>
         [Route("states/{lightId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneLightState(int lightId)
@@ -100,7 +101,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 return StatusCode(500, ex.Message);
             }
         }
-
+        /// <summary>Sets states of lights connected to specific board within specific system.</summary>
+        /// <returns>Switchable lights states in database on success.</returns>
         [Route("states")]
         [HttpPut]
         public async Task<IActionResult> SetLightsStates([FromBody] SwitchableLightDto[] lightsStates)

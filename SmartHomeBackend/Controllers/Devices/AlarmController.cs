@@ -159,7 +159,7 @@ namespace SmartHomeBackend.Controllers.Devices
         }
 
         /// <summary>
-        /// Enables change of alarm's sensor state in the database and in Raspberry Pi
+        /// Enables change of alarm's sensor state in the database and in Raspberry Pi.
         /// </summary>
         /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
         [Route("{alarmId}/sensors")]
@@ -199,7 +199,7 @@ namespace SmartHomeBackend.Controllers.Devices
         }
 
         /// <summary>
-        /// Enables change of alarm's sensor state in the database from Raspberry Pi's request
+        /// Enables change of alarm's sensor state in the database from Raspberry Pi's request.
         /// </summary>
         /// <returns>Alarm's sensor's state in the database after operation on success.</returns>
         [Route("sensorsRPi")]

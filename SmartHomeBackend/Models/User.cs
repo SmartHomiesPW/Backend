@@ -8,9 +8,9 @@ namespace SmartHomeBackend.Models
     {
         [Key]
         public required Guid User_Id { get; init; }
-        public required string Email { get; set; }
-        public required string Password { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
+        public required string Email { get; set; } = "Unknown";
+        public required string Password { get; set; } = "Unknown";
+        public string? FirstName { get; set; } = "Unknown";
+        public string? LastName { get; set; } = "Unknown";
     }
 }

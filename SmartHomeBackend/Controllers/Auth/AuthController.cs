@@ -21,6 +21,8 @@ namespace SmartHomeBackend.Controllers.Auth
             _authService = authService;
         }
 
+        /// <summary>Registers a new user.</summary>
+        /// <returns>New user's data in database on success.</returns>
         [Route("register")]
         [HttpPost]
         public ObjectResult RegisterUser([FromBody] UserRegistrationDto model)
@@ -45,6 +47,8 @@ namespace SmartHomeBackend.Controllers.Auth
             }
         }
 
+        /// <summary>Logins a user.</summary>
+        /// <returns>Logged in user's data in database on success.</returns>
         [Route("login")]
         [HttpPost]
         public ObjectResult Login([FromBody] UserLoginDto model)
