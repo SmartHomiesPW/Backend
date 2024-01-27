@@ -5,6 +5,7 @@ using System.Text.Json;
 using SmartHomeBackend.Globals;
 using SmartHomeBackend.Database;
 using SmartHomeBackend.Models.Dto;
+using System;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
@@ -59,14 +60,27 @@ namespace SmartHomeBackend.Controllers.Devices
         /// <returns>Alarm's state in the database after operation on success.</returns>
         [Route("state")]
         [HttpPut]
-        public ObjectResult SetAlarmState([FromBody] AlarmStateDto alarmState)
+        public async Task<ObjectResult> SetAlarmState([FromBody] AlarmStateDto alarmState)
         {
             try
             {
                 var alarmInDB = _context.Alarms.Find(alarmState.Alarm_Id) ??
                     throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
 
-                alarmInDB.IsActive = alarmState.IsActive;
+                alarmInDB.IsActive = 1 - alarmState.IsActive;
+
+                foreach(var alarmSensorInDB in _context.AlarmSensors)
+                {
+                    string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/set/{alarmSensorInDB.Alarm_Sensor_Id}/{alarmSensorInDB.Is_On}";
+                    var (response, _) = await _deviceService.SendHttpGetRequest(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        alarmSensorInDB.Is_On = alarmInDB.IsActive;
+                        alarmSensorInDB.Movement_Detected = alarmSensorInDB.Is_On == 0 ? 0 : alarmSensorInDB.Movement_Detected;
+                    }
+                }
+
                 alarmInDB.IsTriggered = alarmState.IsTriggered;
                 _context.SaveChanges();
 
