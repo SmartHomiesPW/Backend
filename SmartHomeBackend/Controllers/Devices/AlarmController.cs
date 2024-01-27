@@ -63,17 +63,12 @@ namespace SmartHomeBackend.Controllers.Devices
         {
             try
             {
-                if (_context.Alarms.Find(alarmState.Alarm_Id) == null)
+                var alarmInDB = _context.Alarms.Find(alarmState.Alarm_Id) ??
                     throw new Exception($"Alarm with id {alarmState.Alarm_Id} not found in database.");
 
-                string alarmId = alarmState.Alarm_Id;
-                var alarmInDB = _context.Alarms.Find(alarmId);
-                if (alarmInDB != null)
-                {
-                    alarmInDB.IsActive = alarmState.IsActive;
-                    alarmInDB.IsTriggered = alarmState.IsTriggered;
-                    _context.SaveChanges();
-                }
+                alarmInDB.IsActive = alarmState.IsActive;
+                alarmInDB.IsTriggered = alarmState.IsTriggered;
+                _context.SaveChanges();
 
                 return Ok(alarmInDB);
             }
