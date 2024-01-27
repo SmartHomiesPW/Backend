@@ -7,6 +7,7 @@ using TechTalk.SpecFlow.Assist;
 using System.Net.NetworkInformation;
 using SmartHomeBackendAcceptanceTests.Models;
 using SmartHomeBackendAcceptanceTests.Models.Dto;
+using TechTalk.SpecFlow;
 
 namespace SmartHomeBackendAcceptanceTests.StepDefinitions
 {
@@ -19,6 +20,7 @@ namespace SmartHomeBackendAcceptanceTests.StepDefinitions
 
         public LogInStepDefinitions() {
             var authUri = "http://ec2-16-16-180-91.eu-north-1.compute.amazonaws.com/api/auth";
+            userCredentials = new List<UserLoginDto>();
 
             _restClientOptions = new RestClientOptions(authUri)
             {

@@ -12,7 +12,7 @@ namespace SmartHomeBackendUnitTests.Services
     {
 
         [Fact]
-        public async void UserShouldBeAddedToDatabase()
+        public void UserShouldBeAddedToDatabase()
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -30,10 +30,10 @@ namespace SmartHomeBackendUnitTests.Services
                 var testUserRegistration = new UserRegistrationDto() { Email = "test@test.pl", Password = "www" };
 
                 var transaction = context.Database.BeginTransaction();
-                var result = await myService.CreateNewUser(testUserRegistration);
+                var result = myService.CreateNewUser(testUserRegistration);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(
-                    await myService.VerifyUser(
+                    myService.VerifyUser(
                         new UserLoginDto
                         {
                             Email = testUserRegistration.Email,
@@ -46,7 +46,7 @@ namespace SmartHomeBackendUnitTests.Services
 
         }
         [Fact]
-        public async void UserShouldBeRemovedFromDatabase()
+        public void UserShouldBeRemovedFromDatabase()
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -64,15 +64,15 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var testUser = new UserRegistrationDto() { Email = "test@test.pl", Password = "www" };
 
-                var result = await myService.CreateNewUser(testUser);
-                var deletedUser = await myService.RemoveUser(result?.User_Id ?? Guid.Empty);
+                var result = myService.CreateNewUser(testUser);
+                var deletedUser = myService.RemoveUser(result?.User_Id ?? Guid.Empty);
                 Assert.AreEqual(testUser.Email, deletedUser?.Email);
                 transaction.Rollback();
                 context.ChangeTracker.Clear();
             }
         }
         [Fact]
-        public async void UserShouldBeAbleToLogIn()
+        public void UserShouldBeAbleToLogIn()
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -90,10 +90,10 @@ namespace SmartHomeBackendUnitTests.Services
                 var testUser = new UserRegistrationDto() { Email = "test@test.pl", FirstName = "Peter", Password = "www" };
 
                 var transaction = context.Database.BeginTransaction();
-                var result = await myService.CreateNewUser(testUser);
+                var result = myService.CreateNewUser(testUser);
                 Assert.IsNotNull(result);
 
-                var foundUser = await myService.FindUserFromLogin(
+                var foundUser = myService.FindUserFromLogin(
                     new UserLoginDto() { Email = testUser.Email, Password = testUser.Password }
                     );
                 Assert.AreEqual(testUser.Email, foundUser?.Email);
@@ -105,7 +105,7 @@ namespace SmartHomeBackendUnitTests.Services
         }
 
         [Fact]
-        public async void ShouldNotAllowRegistrationOfUserWithAnEmailAlreadyExistingInDB()
+        public void ShouldNotAllowRegistrationOfUserWithAnEmailAlreadyExistingInDB()
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -125,10 +125,10 @@ namespace SmartHomeBackendUnitTests.Services
 
                 var transaction = context.Database.BeginTransaction();
 
-                var result1 = await myService.CreateNewUser(testUser1);
+                var result1 = myService.CreateNewUser(testUser1);
                 Assert.IsNotNull(result1);
 
-                var result2 = await myService.CreateNewUser(testUser2);
+                var result2 = myService.CreateNewUser(testUser2);
                 Assert.IsNull(result2);
 
                 transaction.Rollback();

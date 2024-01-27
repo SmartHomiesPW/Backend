@@ -7,7 +7,7 @@ namespace SmartHomeBackendIntegrationTests.Board
     public class BoardConnectionTests
     {
         [Fact]
-        public async void LightShouldBeSuccessfullySetOn()
+        public async Task LightShouldBeSuccessfullySetOn()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/lights/set/1/1";
@@ -17,7 +17,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         }
 
         [Fact]
-        public async void LightShouldBeSuccessfullySetOff()
+        public async Task LightShouldBeSuccessfullySetOff()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/lights/set/1/0";
@@ -27,7 +27,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         }
 
         [Fact]
-        public async void LightsStatesShouldBeSuccessfullyReceived()
+        public async Task LightsStatesShouldBeSuccessfullyReceived()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/lights/states";
@@ -37,7 +37,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         }
 
         [Fact]
-        public async void TemperatureSensorsShouldBeSuccessfullyReceived()
+        public async Task TemperatureSensorsShouldBeSuccessfullyReceived()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/temperature";
@@ -47,7 +47,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         }
 
         [Fact]
-        public async void HumiditySensorsShouldBeSuccessfullyReceived()
+        public async Task HumiditySensorsShouldBeSuccessfullyReceived()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/humidity";
@@ -57,7 +57,7 @@ namespace SmartHomeBackendIntegrationTests.Board
         }
 
         [Fact]
-        public async void SunlightSensorsShouldBeSuccessfullyReceived()
+        public async Task SunlightSensorsShouldBeSuccessfullyReceived()
         {
             DeviceService ds = new DeviceService();
             string url = $"{Strings.RPI_API_URL_MICHAL}/sensors/light";

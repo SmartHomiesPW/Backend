@@ -12,8 +12,8 @@ namespace SmartHomeBackendAcceptanceTests.StepDefinitions
     [Binding]
     public class DoorLockStepDefinitions
     {
-        private RestClient _restClient;
-        private RestClientOptions _restClientOptions;
+        private readonly RestClient _restClient;
+        private readonly RestClientOptions _restClientOptions;
 
         public DoorLockStepDefinitions()
         {
@@ -28,7 +28,7 @@ namespace SmartHomeBackendAcceptanceTests.StepDefinitions
         }
 
         [Given(@"Certain door locks in system")]
-        public async void GivenCertainDoorLocksInTheSystem()
+        public async Task GivenCertainDoorLocksInTheSystem()
         {
             var getDoorLocks = $"states";
             var request1 = new RestRequest(getDoorLocks);
@@ -39,7 +39,7 @@ namespace SmartHomeBackendAcceptanceTests.StepDefinitions
         }
 
         [Then(@"Successfully turn on and off the door locks")]
-        public async void ThenSuccessfullyTurnOnAndOffTheDoorLocks()
+        public async Task ThenSuccessfullyTurnOnAndOffTheDoorLocks()
         {
             var putDoorLocks1 = $"set/1";
             var request1 = new RestRequest(putDoorLocks1);
