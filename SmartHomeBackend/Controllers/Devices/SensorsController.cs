@@ -24,6 +24,7 @@ namespace SmartHomeBackend.Controllers.Devices
             _context = context;
         }
 
+        /// <returns>Information about current states of all humidity sensors connected to specific board within specific system on success.</returns>
         [Route("humidity/states")]
         [HttpGet]
         public async Task<IActionResult> GetAllHumiditySensorsStates()
@@ -58,7 +59,7 @@ namespace SmartHomeBackend.Controllers.Devices
                 return StatusCode(500, ex.Message);
             }
         }
-
+        /// <returns>Information about a current state of a specific humidity sensor connected to specific board within specific system on success.</returns>
         [Route("humidity/states/{sensorId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneHumiditySensorState(int sensorId)
@@ -76,7 +77,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<HumiditySensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into HumiditySensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                    var sensor = array.First(l => l.sensorId == sensorId) ??
                         throw new Exception("Humidity Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.humidity;
 
@@ -96,6 +97,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about current states of all sunlight sensors connected to specific board within specific system on success.</returns>
         [Route("sunlight/states")]
         [HttpGet]
         public async Task<IActionResult> GetAllSunlightSensorsStates()
@@ -131,6 +133,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about current states of a specific sunlight sensor connected to specific board within specific system on success.</returns>
         [Route("sunlight/states/{sensorId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneSunlightSensorState(int sensorId)
@@ -148,7 +151,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SunlightSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into SunlightSensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                    var sensor = array.First(l => l.sensorId == sensorId) ??
                         throw new Exception("Sunlight Sensor's id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.lightValue;
 
@@ -168,6 +171,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about current states of all temperature sensors connected to specific board within specific system on success.</returns>
         [Route("temperature/states")]
         [HttpGet]
         public async Task<IActionResult> GetAllTemperatureSensorsStates()
@@ -201,6 +205,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about current state of a specific temperature sensor connected to specific board within specific system on success.</returns>
         [Route("temperature/states/{sensorId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneTemperatureSensorState(int sensorId)
@@ -218,7 +223,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<TemperatureSensorMeasureDto[]>(text) ??
                         throw new Exception("Couldn't deserialize response into TemperatureSensorMeasureDto[].");
-                    var sensor = array.Where(l => l.sensorId == sensorId).FirstOrDefault() ??
+                    var sensor = array.First(l => l.sensorId == sensorId) ??
                         throw new Exception("Temperature Sensor id from response is invalid.");
                     sensorInDB.Value = (decimal)sensor.temperature;
 

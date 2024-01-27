@@ -80,7 +80,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     var text = jsonDocument.RootElement.GetRawText();
                     var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text) ??
                         throw new Exception("Couldn't deserialize to SwitchableLightDto[].");
-                    var light = array.Where(l => l.lightId == lightId).FirstOrDefault() ??
+                    var light = array.First(l => l.lightId == lightId) ??
                         throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDto[].");
                     var lightInDB = _context.SwitchableLights.Find(lightId.ToString()) ??
                         throw new Exception($"Light with id {lightId} not found in database.");

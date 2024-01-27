@@ -179,7 +179,7 @@ namespace SmartHomeBackend.Controllers.Devices
                                         x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
                 if (alarmSensorInDB != null)
                 {
-                    var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
+                    var (response, _) = await _deviceService.SendHttpGetRequest(url);
 
                     if (response.IsSuccessStatusCode)
                     {

@@ -6,7 +6,7 @@ using SmartHomeBackend.Services;
 namespace SmartHomeBackend.Controllers.Auth
 {
     /// <summary>
-    /// Controller responsible for managing requests associated with authorization.
+    /// Controller responsible for managing requests associated with authentication.
     /// </summary>
     [Route("api/auth")]
     [ApiController]

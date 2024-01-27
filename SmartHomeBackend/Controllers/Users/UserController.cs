@@ -4,6 +4,9 @@ using SmartHomeBackend.Services;
 
 namespace SmartHomeBackend.Controllers.Users
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with users in database.
+    /// </summary>
     [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
@@ -15,6 +18,7 @@ namespace SmartHomeBackend.Controllers.Users
             _userService = userService;
         }
 
+        /// <returns>Information about all users from the database on success.</returns>
         [HttpGet]
         public ObjectResult GetAllUsers()
         {
@@ -28,6 +32,7 @@ namespace SmartHomeBackend.Controllers.Users
             }
         }
 
+        /// <returns>Information about a specific user from the database on success.</returns>
         [Route("{userId}")]
         [HttpGet]
         public ObjectResult GetUserWithId(string userId)

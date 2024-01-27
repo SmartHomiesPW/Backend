@@ -10,6 +10,9 @@ using System.Text.Json;
 
 namespace SmartHomeBackend.Controllers.Devices
 {
+    /// <summary>
+    /// Controller responsible for managing requests associated with door locks.
+    /// </summary>
     [Route("api/system/{systemId}/board/{boardId}/devices/door-locks")]
     [ApiController]
     public class DoorLockController : ControllerBase
@@ -23,6 +26,7 @@ namespace SmartHomeBackend.Controllers.Devices
             _context = context;
         }
 
+        /// <returns>Information about current states of all door locks connected to specific board within specific system on success.</returns>
         [Route("states")]
         [HttpGet]
         public async Task<IActionResult> GetAllDoorLocksStates()
@@ -35,12 +39,13 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<DoorLockStateDto[]>(text);
-                    foreach (var doorLock in array ?? [])
+                    var array = JsonSerializer.Deserialize<DoorLockStateDto[]>(text) ??
+                        throw new Exception("Couldn't deserialize to DoorLockStateDto[].");
+                    foreach (var doorLock in array)
                     {
-                        var doorLockInDB = _context.DoorLocks.Find(doorLock.doorLock_Id.ToString());
-                        if(doorLockInDB != null)
-                            doorLockInDB.IsOn = doorLock.isOn;
+                        var doorLockInDB = _context.DoorLocks.Find(doorLock.doorLock_Id.ToString()) ??
+                            throw new Exception($"Door Lock with id {doorLock.doorLock_Id} not found in database.");
+                        doorLockInDB.IsOn = doorLock.isOn;
                     }
                     _context.SaveChanges();
 
@@ -57,6 +62,7 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <returns>Information about current states of all door locks connected to specific board within specific system on success.</returns>
         [Route("states/{doorLockId}")]
         [HttpGet]
         public async Task<IActionResult> GetOneDoorLockState(int doorLockId)
@@ -64,8 +70,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try
             {
                 string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/states/{doorLockId}";
-                
-                if (_context.DoorLocks.Find(doorLockId.ToString()) == null)
+                var doorLockInDB = _context.DoorLocks.Find(doorLockId.ToString()) ??
                     throw new Exception($"Door Lock with id {doorLockId} not found in database.");
 
                 var (response, jsonDocument) = await _deviceService.SendHttpGetRequest(url);
@@ -73,17 +78,12 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var doorLock = JsonSerializer.Deserialize<DoorLockStateDto>(text);
-                    var doorLockInDB = _context.DoorLocks.Find(doorLockId.ToString());
+                    var doorLock = JsonSerializer.Deserialize<DoorLockStateDto>(text) ??
+                        throw new Exception("Couldn't deserialize to DoorLockStateDto[].");
 
-                    if (doorLockInDB != null && doorLock != null)
-                    {
-                        doorLockInDB.IsOn = doorLock.isOn;
-                        _context.SaveChanges();
-                    } else
-                    {
-                        throw new Exception("Couldn't get a door lock state.");
-                    }
+                    doorLockInDB.IsOn = doorLock.isOn;
+                    _context.SaveChanges();
+
                     return Ok(_context.DoorLocks);
                 }
                 else
@@ -96,7 +96,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 return StatusCode(500, ex.Message);
             }
         }
-
+        /// <summary>Sets state of all door locks connected to specific board within specific system</summary>
+        /// <returns>All door locks states in database on success.</returns>
         [HttpPut]
         [Route("set/{isOn}")]
         public async Task<IActionResult> SetAllDoorLocksStates(int isOn)
@@ -123,13 +124,15 @@ namespace SmartHomeBackend.Controllers.Devices
             }
         }
 
+        /// <summary>Sets state of a specific door lock connected to specific board within specific system</summary>
+        /// <returns>A specific door lock state in database on success.</returns>
         [HttpPut]
         [Route("set/{doorLockId}/{isOn}")]
         public async Task<IActionResult> SetOneDoorLockState(int doorLockId, int isOn)
         {
             try
             {
-                string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}"; ;
+                string url = $"{Strings.RPI_API_URL_ADRIAN}/door-locks/set/{doorLockId}/{isOn}";
                 var doorLock = _context.DoorLocks.Find(doorLockId.ToString()) ??
                     throw new Exception($"Door Lock with id {doorLockId} not found in database.");
 

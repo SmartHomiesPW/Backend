@@ -38,7 +38,7 @@ namespace SmartHomeBackend.Services
 
         public User? RemoveUser(Guid user_Id)
         {
-            var userToDelete = _context.Users.Where(u => u.User_Id.Equals(user_Id)).FirstOrDefault();
+            var userToDelete = _context.Users.First(u => u.User_Id.Equals(user_Id));
 
             if (userToDelete != null)
             {
@@ -61,7 +61,7 @@ namespace SmartHomeBackend.Services
 
         public User? FindUserFromLogin(UserLoginDto model)
         {
-            return _context.Users.Where(u => u.Email.Equals(model.Email) && u.Password.Equals(model.Password)).FirstOrDefault();
+            return _context.Users.First(u => u.Email.Equals(model.Email) && u.Password.Equals(model.Password));
         }
     }
 }
