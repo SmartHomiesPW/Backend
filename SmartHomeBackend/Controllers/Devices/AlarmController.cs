@@ -142,7 +142,8 @@ namespace SmartHomeBackend.Controllers.Devices
                         throw new Exception("Couldn't deserialize response into AlarmSensorStateDtoBoardGet[].");
                     foreach (var alarmSensor in array)
                     {
-                        var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
+                        var alarmSensorInDB = _context.AlarmSensors.Where(x => x.Alarm_Id.Equals(alarmId) && 
+                            x.Alarm_Sensor_Id.Equals(alarmSensor.alarmSensorId)).FirstOrDefault();
                         if(alarmSensorInDB != null)
                             alarmSensorInDB.Is_On = alarmSensor.isOn;
                     }
