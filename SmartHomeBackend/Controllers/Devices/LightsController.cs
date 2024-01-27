@@ -41,8 +41,8 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text) ?? 
-                        throw new Exception("Couldn't deserialize response into SwitchableLightDto[].");
+                    var array = JsonSerializer.Deserialize<SwitchableLightDtoBoard[]>(text) ?? 
+                        throw new Exception("Couldn't deserialize response into SwitchableLightDtoBoard[].");
                     foreach (var light in array)
                     {
                         var lightInDB = _context.SwitchableLights.Find(light.lightId.ToString()) ??
@@ -79,10 +79,10 @@ namespace SmartHomeBackend.Controllers.Devices
                 if (response.IsSuccessStatusCode)
                 {
                     var text = jsonDocument.RootElement.GetRawText();
-                    var array = JsonSerializer.Deserialize<SwitchableLightDto[]>(text) ??
-                        throw new Exception("Couldn't deserialize to SwitchableLightDto[].");
+                    var array = JsonSerializer.Deserialize<SwitchableLightDtoBoard[]>(text) ??
+                        throw new Exception("Couldn't deserialize to SwitchableLightDtoBoard[].");
                     var light = array.First(l => l.lightId == lightId) ??
-                        throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDto[].");
+                        throw new Exception($"Couldn't find light with id {lightId} in deserialized SwitchableLightDtoBoard[].");
                     var lightInDB = _context.SwitchableLights.Find(lightId.ToString()) ??
                         throw new Exception($"Light with id {lightId} not found in database.");
                     lightInDB.Value = light.isOn ? 1 : 0;
@@ -110,7 +110,7 @@ namespace SmartHomeBackend.Controllers.Devices
             try {
                 foreach (var lightState in lightsStates)
                 {
-                    string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{(lightState.isOn ? 1 : 0)}";
+                    string url = $"{Strings.RPI_API_URL_ADRIAN}/lights/set/{lightState.lightId}/{lightState.isOn}";
                     
                     if (_context.SwitchableLights.Find(lightState.lightId.ToString()) == null)
                         throw new Exception($"Light with id {lightState.lightId} not found in database.");
@@ -123,7 +123,7 @@ namespace SmartHomeBackend.Controllers.Devices
                     {
                         var lightInDB = _context.SwitchableLights.Find(lightState.lightId.ToString()) ??
                             throw new Exception($"Light with id {lightState.lightId} not found in database.");
-                        lightInDB.Value = lightState.isOn ? 1 : 0;
+                        lightInDB.Value = lightState.isOn;
                     }
                 }
             
