@@ -71,14 +71,16 @@ namespace SmartHomeBackend.Controllers.Devices
                     throw new BadHttpRequestException($"Alarm with id {alarmState.Alarm_Id} not found in database.");
 
 
-                foreach(var alarmSensorInDB in _context.AlarmSensors.Where(a => a.Alarm_Id == alarmInDB.Alarm_Id))
+                var alarmSensorsWithinAlarm = _context.AlarmSensors.Where(a => a.Alarm_Id == alarmInDB.Alarm_Id);
+
+                foreach (var alarmSensorInDB in alarmSensorsWithinAlarm)
                 {
-                    string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/set/{alarmSensorInDB.Alarm_Sensor_Id}/{1 - alarmState.IsActive}";
+                    string url = $"{Strings.RPI_API_URL_MICHAL}/alarm/set/{alarmSensorInDB.Alarm_Sensor_Id}/{alarmState.IsActive}";
                     var (response, _) = await _deviceService.SendHttpGetRequest(url);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        alarmInDB.IsActive = 1 - alarmState.IsActive;
+                        alarmInDB.IsActive = alarmState.IsActive;
                         alarmSensorInDB.Is_On = alarmInDB.IsActive;
                         alarmSensorInDB.Movement_Detected = alarmSensorInDB.Is_On == 0 ? 0 : alarmSensorInDB.Movement_Detected;
                     }
